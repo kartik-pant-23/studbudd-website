@@ -7,6 +7,19 @@ auth_error.status = 401;
 exports.login = (req,res) => {
     User.findOne({email: req.body.email})
     .select('+password')
+    .populate({
+        path: "class",
+        populate: [{
+            path: "subjects.coordinator",
+            model: "User",
+            select: "name"
+        }, {
+            path: "org",
+            model: "Organization",
+            select: "documents name email batches._id batches.tag batches.documents",
+        }],
+        select: "subjects documents org tag batch"
+    })
     .exec()
     .then(user => {
         if(user) {
@@ -22,7 +35,8 @@ exports.login = (req,res) => {
                         } else {
                             res.status(200).json({
                                 message: "Login successful!",
-                                token: token
+                                token: token,
+                                user: user
                             })
                         }
                     })
@@ -33,4 +47,24 @@ exports.login = (req,res) => {
         }
     })
     .catch(err => errorHandler(res, err));
+}
+
+exports.getUserData = (req,res) => {
+    User.findById(req.user._id)
+    .populate({
+        path: "class",
+        populate: [{
+            path: "subjects.coordinator",
+            model: "User",
+            select: "name"
+        }, {
+            path: "org",
+            model: "Organization",
+            select: "documents name email domain batches._id batches.tag batches.documents",
+        }],
+        select: "subjects documents org tag batch"
+    })
+    .exec()
+    .then(user => res.status(200).json(user))
+    .catch(err => errorHandler(res,err));
 }
