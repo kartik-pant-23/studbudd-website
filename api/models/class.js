@@ -10,7 +10,11 @@ const classSchema = mongoose.Schema({
         coordinator: { 
             type: mongoose.SchemaTypes.ObjectId, 
             ref: "User" 
-        }
+        },
+        documents: [{
+            type: mongoose.SchemaTypes.ObjectId, 
+            ref: "Document"
+        }]
     }],
     students: [{
         type: mongoose.SchemaTypes.ObjectId, 

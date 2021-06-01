@@ -1,5 +1,6 @@
 const multer = require('multer');
 const fs = require('fs');
+const path = require("path");
 
 const AWS = require("aws-sdk");
 
@@ -15,7 +16,19 @@ const storage = multer.diskStorage({
         cb(null, orgShortName+'.'+mimeType);
     }
 })
-const upload = multer({storage: storage});
+
+const err = new Error("File type not allowed!");
+err.status = 409;
+const upload = multer({
+    storage: storage,
+    fileFilter: function(req,file,callback) {
+        var ext = path.extname(file.originalname);
+        if(ext != '.csv') {
+            return callback(err)
+        }
+        callback(null, true)
+    }
+});
 
 exports.upload = upload.single('contentFile');
 
@@ -48,8 +61,15 @@ exports.get_data = function (req, res, next) {
     })
 }
 
-exports.uploadDoc = multer().single('file');
-
+exports.uploadDoc = multer({
+    fileFilter: function(req,file,callback) {
+        var ext = path.extname(file.originalname);
+        if(ext != '.png' && ext != '.jpg' && ext !== '.pdf' && ext !== '.jpeg') {
+            return callback(err)
+        }
+        callback(null, true)
+    }
+}).single('file');
 const S3 = new AWS.S3({
     accessKeyId: process.env.AWS_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SECRET

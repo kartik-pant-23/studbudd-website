@@ -9,7 +9,7 @@ exports.generate = (user, callback) => {
             domain: user.domain || user.email.split('@')[1]
         },
         `${process.env.JWT_KEY}`,
-        {expiresIn: '7d'},
+        {expiresIn: '30d'},
         (err, token) => {
             if(err)
                 return callback(err);
