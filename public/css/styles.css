@@ -3,6 +3,7 @@ body{
   align-items: center;
   font-family: 'Montserrat', sans-serif;
 }
+
 .stud{
   color: #29bb89;
 }
@@ -77,7 +78,7 @@ h3{
   text-align: right;
 }
 #deals{
-  padding: 100px;
+  padding: 100px 50px;
   background-color: #fff;
 }
 .deals-heading-para{
@@ -229,6 +230,11 @@ h3{
     font-size: 1.2rem;
   }
 
+}
+@media (max-width: 400px){
+  .navbar-brand{
+    width: 10px;
+  }
 }
 
 
