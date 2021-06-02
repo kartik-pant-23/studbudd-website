@@ -8,7 +8,9 @@ const usersRouter = require('./api/routes/users')
 const classesRouter = require('./api/routes/classes')
 const documentsRouter = require('./api/routes/documents')
 
-const clientLoginRouter = require("./client/login")
+const clientLoginRouter = require("./client/login");
+const clientRegisterRouter = require("./client/register");
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -33,15 +35,29 @@ app.use((req, res, next) => {
 // Connect with database
 connectDB();
 
+
+
+
+
+
+
+
+
 //Frontend code
 
 app.get("/", function (req, res) {
     res.render("home");
 });
 app.use("/signin", clientLoginRouter)
-app.get("/register", function (req, res) {
-    res.render("register");
-});
+app.use("/register", clientRegisterRouter)
+
+
+
+
+
+
+
+
 
 
 //Backend code

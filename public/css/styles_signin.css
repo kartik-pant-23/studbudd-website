@@ -1,0 +1,172 @@
+*{
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+body{
+  background-color: #212121;
+  background-position: center;
+  background-size: cover;
+  text-align: center;
+  overflow: hidden;
+}
+
+.container{
+  width: 360px;
+  height: 400px;
+  margin: 8% auto;
+  background: #fff;
+  border-radius: 20px;
+  position: relative;
+  bottom: 50px;
+  overflow: hidden;
+}
+h3{
+  text-align: center;
+  margin-bottom: 40px;
+  color: #777;
+}
+.container section{
+  width: 280px;
+  position: absolute;
+  top: 100px;
+  left: 40px;
+  transition: 0.5s;
+}
+
+section input{
+  width: 100%;
+  padding: 10px 5px;
+  margin: 5px 0;
+  border: 0;
+  border-bottom: 1px solid #999;
+  outline: none;
+  background: transparent;
+}
+
+::placeholder{
+  color: #777;
+}
+.btn-box{
+  width: 100%;
+  margin: 30px auto;
+  text-align: center;
+}
+section button{
+  width: 110px;
+  height: 35px;
+  margin: 0 10px;
+  background: linear-gradient(to right, #0f376a, #3498db);
+  border-radius: 30px;
+  border: 0;
+  outline: none;
+  color: #fff;
+  cursor: pointer;
+}
+#Form2{
+  left: 450px;
+}
+#Form3{
+  left: 450px;
+}
+.step-row{
+  width: 360px;
+  height: 40px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -1px 5px -1px #000;
+  position: relative;
+}
+.step-col{
+  width: 120px;
+  text-align: center;
+  color: #fff;
+  position: relative;
+}
+#progress{
+  position: absolute;
+  height: 100%;
+  width: 120px;
+  background: linear-gradient(to right, #0f376a, #3498db);
+  transition: 1s;
+}
+#progress::after{
+  content: '';
+  height: 0;
+  width: 0;
+  border-top: 20px solid transparent;
+  border-bottom: 20px solid transparent;
+  position: absolute;
+  right: -20px;
+  top: 0;
+  border-left: 20px solid #3498db;
+}
+/* Customize the label (the container) */
+.container1 {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  text-align: left;
+  color: #777;
+}
+
+/* Hide the browser's default radio button */
+.container1 input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 15px;
+  width: 15px;
+  background-color: #eee;
+  border-radius: 50%;
+  border: 1px solid #999;
+}
+
+/* On mouse-over, add a grey background color */
+.container1:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.container1 input:checked ~ .checkmark {
+  background-color: #0f376a;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.container1 input:checked ~ .checkmark:after {
+  display: block;
+}
+
+
+.logoOfSignin{
+  width: 315px;
+    height: 85px;
+    padding-top: 40px;
+    position: relative;
+    right: 15px;
+}

@@ -1,32 +1,21 @@
-<div class="container mt-5">
-  <h1>Signin</h1>
+<%- include('partials/header'); -%>
 
-  <div class="row">
-    <div class="col-sm-8">
-      <div class="card">
-        <div class="card-body">
+  <body id="signin">
 
-          <!-- Makes POST request to /login route -->
-          <form action="/signin" method="POST">
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" class="form-control" name="username">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" name="password">
-            </div>
-            <button type="submit" class="btn btn-dark">Signin</button>
+    <form action="/signin" class="form-signin" method="POST">
+      <img src="/images/logo-dark.png" class="signin-icon" alt="">
+      <input type="text" name="username" class="form-control top" placeholder="Email or host name" required>
+      <input type="password" class="form-control bottom" name="password" placeholder="Password" required>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign me in</button>
+      <br />
+      <br />
+      <% if(error){ %>
+        <p style="font-size: 0.5rem; color: red;">*Authentication Failed</p>
+     <% } %>
+      <p class="p-signin">*In case you’ve forgot your password, ask organization admin to change it for you.</p>
+    </form>
+   
 
-            <% if(error){ %>
-              <p>Authentication failed</p>
-              <% } %>
+  </body>
 
-          </form>
-
-        </div>
-      </div>
-    </div>
-
-  </div>
-</div>
+  </html>

@@ -1,25 +1,4 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-  <meta charset="utf-8">
-  <title>StudBudd</title>
-
-  <!-- Bootstrap scripts -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
-  <!-- css stylesheets -->
-  <link rel="stylesheet" href="/css/styles.css">
-  <!-- font awesome -->
-  <script src="https://kit.fontawesome.com/84e9632ba7.js" crossorigin="anonymous"></script>
-  <!-- google fonts -->
-  <link rel="preconnect" href="https://fonts.gstatic.com">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;300;400;500;700;900&family=Ubuntu:wght@300;400;700&display=swap" rel="stylesheet">
-
-
-</head>
+<%- include('partials/header'); -%>
 
 <body>
   <section id="title">
@@ -27,7 +6,7 @@
 
       <!-- NAVBAR -->
       <nav class="navbar navbar-expand-lg navbar-dark">
-        <a class="navbar-brand" href=""><img src="/images/icon.png" alt=""> StudBudd</a>
+        <a href=""><img class="navbar-brand" src="/images/logo-dark.png" alt=""></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -254,7 +233,7 @@
   <section id="contacts">
 
     <div class="footer-class">
-
+<img src="/images/icon.png" alt="" style="padding-top: 20px;height: 80px;width: 80px;">
       <div class="footer-sections">
         <h2 class="footer-sections-heading">StudBudd</h2>
         <p class="footer-column-para">Our aim is to make it easier for the</p>
@@ -308,10 +287,4 @@
 
   </section>
 
-  <footer id="footer">
-    <p>© 2021 studbudd.com - Starting up for a better future</p>
-  </footer>
-
-</body>
-
-</html>
+  <%- include('partials/footer'); -%>

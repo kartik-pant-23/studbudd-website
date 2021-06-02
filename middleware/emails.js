@@ -48,8 +48,8 @@ exports.createContent = function (user, type, cb) {
             switch (type) {
                 case 0: // Register email
                     htmlBody.subject = 'Email verification | StudBudd';
-                    htmlBody.body = '<html><body><center><h3>Thank you for joining us!</h3></center><p>Hi! '+user.name+'<br>Glad you joined us!<br>Click on the following link to get your email verified!<br><a href="http://192.168.18.8:3000/api/org/verify_email/'+token+'">Confirmation Link</p></body></html>';
-                    htmlBody.text = 'Glad you joined us!\n\nClick on the following link to get your email verified!\nhttp://192.168.18.8:3000/api/org/verify_email/'+token;
+                    htmlBody.body = '<html><body><center><h3>Thank you for joining us!</h3></center><p>Hi! '+user.name+`<br>Glad you joined us!<br>Click on the following link to get your email verified!<br><a href="${process.env.BASE_URL}/api/org/verify_email/`+token+'">Confirmation Link</p></body></html>';
+                    htmlBody.text = `Glad you joined us!\n\nClick on the following link to get your email verified!\n${process.env.BASE_URL}/api/org/verify_email/`+token;
                     break;
                 default:
                     break;

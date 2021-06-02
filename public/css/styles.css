@@ -60,9 +60,8 @@ h3{
   font-weight: 400;
 }
 .navbar-brand{
-  font-family: 'Ubuntu', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 400;
+  width: 425px;
+  height: 114px;
 }
 .dropdown-menu{
   background-color: #212121;
@@ -203,6 +202,12 @@ h3{
     padding: 100px 50px 100px;
   }
 }
+@media (max-width: 1306px){
+  .navbar-brand{
+    width: 315px;
+    height: 85px;
+  }
+}
 @media (max-width: 812px){
   h1{
     font-family: 'Montserrat', sans-serif;
@@ -223,3 +228,53 @@ h3{
     font-weight: 500;
     font-size: 1.2rem;
   }
+
+}
+
+
+/* Signin css */
+#signin{
+  background-color: #212121;
+  align-items: center;
+  background-size: 100%;
+}
+
+
+.form-signin {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  padding-top: 100px;
+  margin: 0 auto;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.top {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.bottom {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+.signin-icon{
+  width: 315px;
+    height: 85px;
+    margin-bottom: 65px;
+    position: relative;
+    right: 20px;
+    
+}
+.p-signin{
+  color: #706c61;
+}
