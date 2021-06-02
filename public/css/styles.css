@@ -102,12 +102,13 @@ h3{
 .customer-fav{
   background-color: #212121;
 }
-.small .big{
-  background-color: #d8f8b7;
+.big {
+  padding-bottom: 5px;
 }
 .card{
   box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.3);
 }
+
 .customer-fav-heading{
   color: #ffff;
 }
@@ -155,7 +156,7 @@ h3{
   padding: 50px;
 }
 .footer-column-para{
-  line-height: 0.5rem;;
+  line-height: 1.2rem;
 }
 .footer-sections{
   padding: 15px;
