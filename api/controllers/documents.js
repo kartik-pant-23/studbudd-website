@@ -2,58 +2,30 @@ const mongoose = require("mongoose");
 const { uploadS3, deleteS3 } = require("../../middleware/files_upload");
 
 const Document = require('../models/document');
-const Organization = require('../models/organization')
-const Class = require('../models/class')
 
 const errorHandler = require('../../middleware/error_handler');
+
+exports.getDocuments = (req,res) => {
+    Document.find({ref: req.params['ref']}).exec()
+    .then(docs => res.status(200).json({documents: docs}))
+    .catch(err => errorHandler(res,err));
+}
+
+exports.getDocumentDetails = (req,res) => {
+    Document.findById(req.params['_id']).exec()
+    .then(doc => req.status(200).json({document: doc}))
+    .catch(err => errorHandler(res,err));
+}
 
 exports.uploadDocument = (req, res) => {
     const _id = new mongoose.Types.ObjectId();
     const file = req.file;
     const fileExtension = req.file.originalname.split('.').reverse()[0];
-    file.originalname = req.user.domain + '/' + _id + '.' + fileExtension;
+    file.originalname = req.user.domain + '/documents/' + _id + '.' + fileExtension;
 
-    const { _orgId, _batchId, _classId, _subjectId } = req.body;
+    const { ref } = req.body;
 
-    var type = 0;
-    if (_subjectId) {
-        type = _classId ? 1 : 0;
-    } else if (_classId) {
-        type = 2;
-    } else if (_batchId) {
-        type = _orgId ? 3 : 0;
-    } else if (_orgId) {
-        type = 4;
-    }
-
-    function _saveInClass(_doc, _inSubject = false) {
-        var _find = (_inSubject)
-            ? { _id: _classId, "subjects._id": _subjectId }
-            : { _id: _classId };
-        var _update = { $push: (_inSubject) ? { "subjects.$.documents": _doc._id } : { documents: _doc._id } };
-        Class.findOneAndUpdate(_find, _update, { new: true }).exec()
-            .then(_class => res.status(200).json({
-                message: "Document has been added!",
-                addedDocument: _doc,
-                updatedEntity: _class
-            }))
-            .catch(err => errorHandler(res, err));
-    }
-    function _saveInOrg(_doc, _inBatch = false) {
-        var _find = (_inBatch)
-            ? { _id: _orgId, "batches._id": _batchId }
-            : { _id: _orgId };
-        var _update = { $push: (_inBatch) ? { "batches.$.documents": _doc._id } : { documents: _doc._id } };
-        Organization.findOneAndUpdate(_find, _update, { new: true }).exec()
-            .then(_org => res.status(200).json({
-                message: "Document has been added!",
-                addedDocument: _doc,
-                updatedEntity: _org
-            }))
-            .catch(err => errorHandler(res, err));
-    }
-
-    if (type != 0) {
+    if (ref) {
         uploadS3(req.user.domain, file, (err, url) => {
             if (err) errorHandler(res, err);
             else {
@@ -62,31 +34,15 @@ exports.uploadDocument = (req, res) => {
                     tag: req.body.tag,
                     key: file.originalname,
                     url: url,
-                    type: type,
-                    ref1: (_classId) ?_classId :_orgId,
-                    ref2: (_subjectId) ?_subjectId :_batchId
+                    ref: ref,
+                    uploadedBy: req.user._id
                 });
 
                 document.save()
-                    .then(doc => {
-                        switch (type) {
-                            case 1:
-                                _saveInClass(doc, true);
-                                break;
-                            case 2:
-                                _saveInClass(doc);
-                                break;
-                            case 3:
-                                _saveInOrg(doc, true);
-                                break;
-                            case 4:
-                                _saveInOrg(doc);
-                                break;
-                            default:
-                                errorHandler(res, new Error());
-                                break;
-                        }
-                    })
+                    .then(doc => res.status(200).json({
+                        message: "Document saved!",
+                        document: doc
+                    }))
                     .catch(err => errorHandler(res, err));
             }
         })
@@ -97,19 +53,42 @@ exports.uploadDocument = (req, res) => {
     }
 }
 
+exports.patch = (req,res) => {
+    const { tag } = req.body;
+    var _update = { $set: {} };
+    if(tag) _update.$set.tag = tag;
+    
+    Document.findOneAndUpdate(
+        {$and: [{_id: req.params['_id']}, {uploadedBy: req.user._id}]},
+        _update, { new: true }
+    ).exec()
+    .then(doc => res.status(200).json({
+        message: "Document updated!",
+        document: doc
+    }))
+    .catch(err => errorHandler(res,err));
+}
+
 exports.deleteDocument = (req,res) => {
-    Document.findById(req.params['_id']).exec()
+    Document.findOneAndDelete({
+        $and: [{_id: req.params['_id']}, {uploadedBy: req.user._id}]
+    }).exec()
     .then(doc => {
-        deleteS3(doc.key, (err,_) => {
-            if(err)
-                errorHandler(res,err);
-            else {
-                doc.remove()
-                .then(doc => res.status(200).json({
-                    message: "Item has been deleted!"
-                }))
-                .catch(err => errorHandler(res,err));
-            }
-        })
+        if(doc) {
+            deleteS3(doc.key, (err,_) => {
+                if(err) errorHandler(res,err);
+                else {
+                    res.status(200).json({
+                        message: "Document deleted!",
+                        document: doc
+                    })
+                }
+            })
+        } else {
+            res.status(404).json({
+                message: "Document already deleted and unauthorised!"
+            })
+        }
     })
+    .catch(err => errorHandler(res,err));
 }

@@ -3,10 +3,10 @@ const bcryptjs = require("bcryptjs");
 const { generate } = require("../../middleware/auth")
 
 const organizationSchema = mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
     role: { type: String, default: "org" },
-    domain: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
+    domain: { type: String, required: true, unique: true, trim: true  },
+    email: { type: String, required: true, unique: true, trim: true  },
     password: { type: String, select: false },
     monthlyBill: { type: Number, required: true },
     maxFacultyCount: { type: Number, required: true },
@@ -21,21 +21,13 @@ const organizationSchema = mongoose.Schema({
     documentsSize: { type: Number, default: 0 },
     verified: { type: Boolean, default: false, select: false },
     allowChangePassword: { type: Boolean, default: false, select: false },
-    documents: [{
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "Document"
-    }],
     faculty: [{ type: mongoose.Types.ObjectId, ref: "User" }],
     batches: [{
-        tag: { type: String, required: true, unique: true },
+        tag: { type: String, required: true, unique: true, trim: true  },
         classes: [{
             type: mongoose.SchemaTypes.ObjectId,
             ref: "Class"
         }],
-        documents: [{
-            type: mongoose.SchemaTypes.ObjectId,
-            ref: "Document"
-        }]
     }]
 }, {timestamps: true});
 
