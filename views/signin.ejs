@@ -1,21 +1,30 @@
 <%- include('partials/header'); -%>
-
-  <body id="signin">
-
-    <form action="/signin" class="form-signin" method="POST">
+<body id="signin">
+    <form id="signin-form" action="/userHome" class="form-signin" method="GET">
       <img src="/images/logo-dark.png" class="signin-icon" alt="">
-      <input type="text" name="username" class="form-control top" placeholder="Email or host name" required>
-      <input type="password" class="form-control bottom" name="password" placeholder="Password" required>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign me in</button>
+      <div id="alert">
+        
+      </div>
+      <input id="userId" type="text" class="form-control top"
+        placeholder="<%= data=='org' ?'Enter email/domain' :'Enter email address'%>" required>
+      <input id="password" type="password" class="form-control bottom" placeholder="Password" required>
+      <% if(data=='org'){ %>
+        <a style="padding-top: 20px; font-size: 15px;;" href="">Forgot Password??</a>
+      <% } %>
+      <input id="signin-btn" class="btn btn-lg btn-primary btn-block" type="button" value="Sign me in"/>
       <br />
       <br />
-      <% if(error){ %>
-        <p style="font-size: 0.5rem; color: red;">*Authentication Failed</p>
-     <% } %>
-      <p class="p-signin">*In case you’ve forgot your password, ask organization admin to change it for you.</p>
+      <% if(data=='org'){ %>
+        <p style="color: azure;">Don't have an account? <a href="/register"><em>Register</em></a></p>
+      <% } %>
+      <br />
+      <% if(data=='user'){ %>
+        <p class="p-signin">*In case you’ve forgot your password, ask organization admin to change it for you.</p>
+        <% } %>
+          
     </form>
-   
 
+<script src="/js/signin.js"></script>
   </body>
 
   </html>

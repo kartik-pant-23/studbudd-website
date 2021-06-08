@@ -8,9 +8,6 @@ const usersRouter = require('./api/routes/users')
 const classesRouter = require('./api/routes/classes')
 const documentsRouter = require('./api/routes/documents')
 
-const clientLoginRouter = require("./client/login");
-const clientRegisterRouter = require("./client/register");
-
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -36,28 +33,17 @@ app.use((req, res, next) => {
 connectDB();
 
 
-
-
-
-
-
-
-
 //Frontend code
 
 app.get("/", function (req, res) {
     res.render("home");
 });
-app.use("/signin", clientLoginRouter)
-app.use("/register", clientRegisterRouter)
-
-
-
-
-
-
-
-
+app.get("/home/:domain", (req, res) => {
+    res.render("userHome", {data: req.params['domain']})
+});
+app.get("/signin/:url", (req, res) => {
+    res.render("signin", {data: req.params['url']})
+})
 
 
 //Backend code
@@ -77,9 +63,10 @@ app.use('/api/document', documentsRouter);
 
 // Handle 404 error
 app.use((req, res) => {
-    let error = new Error("Route not implemented");
-    error.status = 404;
-    throw error;
+    res.render("home")
+    // let error = new Error("Route not implemented");
+    // error.status = 404;
+    // throw error;
 })
 
 // Handle errors

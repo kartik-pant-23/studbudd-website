@@ -39,11 +39,15 @@ h3{
   width: 50%;
   margin: 20px;
 }
+.testimonial-text{
+  color: #ffeda3;
+}
+
 .testimonial-image:hover{
   transform: scale(1.1);
 }
 .carousel-item{
-  padding: 7% 15%;
+  padding: 7% 10%;
 }
 
 /* navigation bar */
@@ -61,8 +65,8 @@ h3{
   font-weight: 400;
 }
 .navbar-brand{
-  width: 425px;
-  height: 114px;
+  width: 390px;
+  height: auto;
 }
 .dropdown-menu{
   background-color: #212121;
@@ -194,7 +198,7 @@ h3{
   background-color: #000;
   color: #ffff;
 }
-@media (min-width: 1306px){
+@media (min-width: 1392px){
   .footer-sections{
     display: inline-block;
     text-align: left;
@@ -232,12 +236,15 @@ h3{
   }
 
 }
-@media (max-width: 400px){
-  .navbar-brand{
-    width: 10px;
-  }
-}
 
+@media (max-width: 500px){
+  .testimonial-image{
+    width: 70%;
+  }
+  .testimonial-text{
+    font-size: 1.7rem;
+}
+}
 
 /* Signin css */
 #signin{
@@ -276,7 +283,7 @@ h3{
 }
 .signin-icon{
   width: 315px;
-    height: 85px;
+    height: auto;
     margin-bottom: 65px;
     position: relative;
     right: 20px;
