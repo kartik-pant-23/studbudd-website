@@ -6,8 +6,8 @@ const Organization = require("./organization")
 const { generate } = require("../../middleware/auth")
 
 const userSchema = mongoose.Schema({
-    name: { type: String, required: true },
-    email: { type: String, unique: true },
+    name: { type: String, required: true, trim: true  },
+    email: { type: String, unique: true, trim: true  },
     password: { type: String, select: false },
     role: { type: String, required: true },
     org: { type: mongoose.Types.ObjectId, ref: "Organization" },

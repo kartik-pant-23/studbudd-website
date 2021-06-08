@@ -3,10 +3,11 @@ const app = express();
 const connectDB = require('./middleware/db')
 const ejs = require("ejs");
 
-const orgRouter = require('./api/routes/organizations')
-const usersRouter = require('./api/routes/users')
-const classesRouter = require('./api/routes/classes')
-const documentsRouter = require('./api/routes/documents')
+const orgRouter = require('./api/routes/organizations');
+const usersRouter = require('./api/routes/users');
+const classesRouter = require('./api/routes/classes');
+const documentsRouter = require('./api/routes/documents');
+const assignmentsRouter = require("./api/routes/assignments");
 
 
 app.use(express.json());
@@ -60,6 +61,7 @@ app.use('/api/org', orgRouter);
 app.use('/api/user', usersRouter);
 app.use('/api/class', classesRouter);
 app.use('/api/document', documentsRouter);
+app.use('/api/assignment', assignmentsRouter);
 
 // Handle 404 error
 app.use((req, res) => {
