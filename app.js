@@ -45,6 +45,9 @@ app.get("/home/:domain", (req, res) => {
 app.get("/signin/:url", (req, res) => {
     res.render("signin", {data: req.params['url']})
 })
+app.get("/register/:choice", (req,res) => {
+    res.render("register", { choice: req.params['choice'] });
+})
 
 
 //Backend code
