@@ -95,7 +95,7 @@ exports.verifyEmail = (req, res) => {
     try {
         const decode = jwt.verify(token, `${process.env.JWT_KEY}`);
         Organization.findByIdAndUpdate(decode._id, { $set: { verified: true } }).exec()
-            .then(_ => res.status(301).redirect(`${process.env.BASE_URL}/signin`))
+            .then(_ => res.status(301).redirect(`${process.env.BASE_URL}/signin/org`))
             .catch(err => errorHandler(res, err));
     } catch (err) {
         errorHandler(res, err);

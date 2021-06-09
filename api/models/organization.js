@@ -23,7 +23,7 @@ const organizationSchema = mongoose.Schema({
     allowChangePassword: { type: Boolean, default: false, select: false },
     faculty: [{ type: mongoose.Types.ObjectId, ref: "User" }],
     batches: [{
-        tag: { type: String, required: true, unique: true, trim: true  },
+        tag: { type: String, required: true, rim: true },
         classes: [{
             type: mongoose.SchemaTypes.ObjectId,
             ref: "Class"
