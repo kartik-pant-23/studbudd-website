@@ -1,13 +1,122 @@
-<%- include('partials/mainHeader'); -%>
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/userhome.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700;900" rel="stylesheet">
+	<title>Home | Studbudd</title>
+</head>
 
-<section>
-  <h1><strong>Hey there,</strong></h1>
-  <div class="containers">
-    <p id="data">See how your batches are doing... We were here all the time!!</p>
-  </div>
+<body>
+	<%- include('partials/navbar') -%>
+		<main>
+			<h1>
+				Indian Institute of Information Technology, Bhopal
+			</h1>
+			<section>
+				<p id="subhead">
+					See how your batches are doing... We were here all the time!!
+				</p>
+				<div id="sectionheader">
+					<div id="sec-header-flex">
+						<h2>Batches Overview</h2>
+						<div class="progress">
+							<span id="studentpercent" style="font-weight: bold;">60%</span> exhausted
+							<div class="bar-border">
+								<div class="bar-progress" id="studentprogress"></div>
+							</div>
+						</div>
+					</div>
+					<button>
+						<div id="button-text">Add New Batch</div><strong>+</strong>
+					</button>
+				</div>
+				<!-- <%- include('partials/empty') -%> -->
+				<div class="grid batch-grid">
+					<div class="grid-container batch-container">
+						<div id="batch-details">
+							<div id="batch-head"> Target IIT-JEE 2022 </div>
+							<div id="batch-subhead"> Classes count: <strong id="class-count">5</strong> </div>
+						</div>
+					</div>
+					<div class="grid-container batch-container">
+						<div id="batch-details">
+							<div id="batch-head"> Target NEET 2022 </div>
+							<div id="batch-subhead"> Classes count: <strong id="class-count">2</strong> </div>
+						</div>
+					</div>
+				</div>
+			</section>
+			<br>
+			<section>
+				<p id="subhead">
+					All the documents that have been added on organization level are visible here. These are visible to
+					all the students.
+				</p>
+				<div id="sectionheader">
+					<div id="sec-header-flex">
+						<h2>Documents Overview</h2>
+						<div class="progress">
+							<span id="documentpercent" style="font-weight: bold;">60%</span> exhausted
+							<div class="bar-border">
+								<div class="bar-progress" id="documentprogress"></div>
+							</div>
+						</div>
+					</div>
+					<button>
+						<div id="button-text">Add New Document</div><strong>+</strong>
+					</button>
+				</div>
+				<div class="grid doc-grid">
+					<div class="grid-container doc-container">
+						<img src="/images/assignments.png" alt="" id="doc-img">
+						<div id="doc-head">
+							Fee Installment Notice
+						</div>
+					</div>
+					<div class="grid-container doc-container">
+						<img src="/images/exam.png" alt="" id="doc-img">
+						<div id="doc-head">
+							Exams Commencement
+						</div>
+					</div>
+					<div class="grid-container doc-container">
+						<img src="/images/bkgImg-Page1.png" alt="" id="doc-img">
+						<div id="doc-head">
+							CODAME-Coding Competition 2021
+						</div>
+					</div>
+				</div>
+			</section>
 
-</section>
+			<br>
 
+			<h1>
+				Marketplace | Studbudd
+			</h1>
+			<section>
+				<p>
+					Are you all caught up? Let's replenish your resources
+				</p>
+			</section>
 
-<%- include('partials/mainFooter'); -%>
+			<br>
+
+			<h1>
+				Help and support | Studbudd
+			</h1>
+			<section>
+				<p>
+					Are you stuck? We're there to help you!!
+				</p>
+			</section>
+		</main>
+
+		<%- include('partials/footer') -%>
+</body>
+
+</html>

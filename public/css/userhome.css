@@ -1,0 +1,227 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Montserrat';
+}
+
+h1 {
+    width: 100%;
+    border-left: 8px solid #3498db;
+    border-radius: 4px;
+    padding: 8px 12px;
+    text-overflow: ellipsis;
+    transition: 1s;
+}
+
+button {
+    cursor: pointer;
+    background-color: #3498db;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    padding: 8px 24px;
+    color: white;
+    align-items: center;
+    display: inline-flex;
+    font-size: 1.1em;
+    font-weight: 500;
+    box-shadow: 0px 0px 12px rgba(0, 0, 0, 0.25);
+}
+button:hover {
+    background-color: #2f8ac7;
+}
+
+#navbar {
+    background-color: #1d1d1d;
+    width: 100%;
+    height: 56px;
+    padding: 0;
+    position: fixed;
+    top: 0;
+    display: flex;
+}
+#navlogo {
+    float: left;
+    height: 100%;
+    padding: 6px 28px;
+}
+#navlinks {
+    height: 100%;
+    padding: 0 14px;
+    text-align: right;
+    margin-left: auto;
+    display: flex;
+}
+#navlinks button {
+    padding: 0px 14px;
+    background-color: #1d1d1d;
+}
+#navlinks button:hover {
+    background-color: #2f2f2f;
+}
+#navicon {
+    height: 24px;
+}
+
+main {
+    padding: 24px 64px;
+    margin-top: 56px;
+}
+
+section {
+    margin: 16px 32px;
+    background-color: rgba(52, 152, 219, 0.05);
+    padding: 24px;
+    border-radius: 5px;
+}
+section button strong {
+    font-size: 2em;
+    display: none;
+}
+#sectionheader {
+    width: 100%;
+    height: 48px;
+    padding: 24px;
+    display: flex;
+    margin: 24px 0;
+    align-items: center;
+}
+.progress {
+    margin: 0 16px;
+    font-size: 0.75em;
+    text-align: center;
+}
+.bar-border {
+    height: 6px;
+    width: 150px;
+    border: solid 0.75px rgba(52, 152, 219, 0.5);
+    border-radius: 5px;
+    overflow: hidden;
+}
+.bar-progress {
+    background-color: #3498db;
+    height: 100%;
+    width: 60%;
+}
+#sectionheader button {
+    margin-left: auto;
+}
+#sec-header-flex {
+    text-align: center;
+    display: flex;
+}
+
+.grid {
+    display: grid;
+    margin: 0px 36px;
+}
+.grid-container {
+    margin: 8px;
+    text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.10);
+    border-radius: 2px;
+    transition: box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+}
+.grid-container:hover {
+    box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.20);
+}
+
+.batch-grid {
+    grid-template-columns: 25% 25% 25% 25%;
+}
+.batch-container {
+    padding: 16px;
+    padding-top: 64px;
+    display: flex;
+    align-items: flex-end;
+}
+#batch-details {
+    width: 100%;
+    text-align: center;
+}
+#batch-head {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #3498db;
+}
+#batch-subhead {
+    font-weight: lighter;
+}
+
+.doc-grid {
+    grid-template-columns: 33.33% 33.33% 33.33%;
+}
+.doc-container {
+    height: 200px;
+}
+#doc-img {
+    width: 100%;
+    height: 75%;
+    object-fit: cover;
+}
+#doc-head {
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #3498db;
+    margin: 0px 24px;
+    margin-top: 8px;
+    text-align: start;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.footer {
+    padding: 2%;
+    background-color: rgba(52, 152, 219, 0.05);
+    text-align: center;
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.75);
+}
+
+/* Responsive */
+@media (max-width: 1000px) {
+    main { padding: 24px; }
+}
+@media (max-width: 800px) {
+    main { padding: 16px; }
+    .progress { text-align: center; }
+    #sec-header-flex {
+        display: block;
+    }
+    section button {
+        font-size: 0.75em;
+    }
+    .batch-grid { grid-template-columns: 33.33% 33.33% 33.33%; }
+    .doc-grid { grid-template-columns: 50% 50%; }
+}
+@media (max-width: 700px) {
+    section { margin: 16px; }
+    #sectionheader { padding: 6px; }
+    .grid { margin: 0 12px; }
+}
+@media (max-width: 600px) {
+    .grid { grid-template-columns: 50% 50%; }
+    section { margin: 8px; }
+}
+@media (max-width: 450px) {
+    .grid { 
+        grid-template-columns: 100%; 
+        margin: 0;
+    }
+    section { margin: 8px 0px; }
+}
+@media (max-width: 350px) {
+    section button {
+        padding: 0 8px;
+        border-radius: 50%;
+    }
+    section button #button-text { display: none; }
+    section button strong {
+        display: block;
+    }
+}
