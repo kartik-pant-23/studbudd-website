@@ -95,14 +95,14 @@ section button strong {
 .bar-border {
     height: 6px;
     width: 150px;
-    border: solid 0.75px rgba(52, 152, 219, 0.5);
+    margin: 0px auto;
+    padding: 0px;
+    border: solid 0.75px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
     overflow: hidden;
 }
 .bar-progress {
-    background-color: #3498db;
     height: 100%;
-    width: 60%;
 }
 #sectionheader button {
     margin-left: auto;
@@ -180,7 +180,7 @@ section button strong {
     background-color: rgba(52, 152, 219, 0.05);
     text-align: center;
     font-size: 0.8em;
-    color: rgba(0, 0, 0, 0.75);
+    color: rgba(0, 0, 0, 0.5);
 }
 
 /* Responsive */
@@ -206,7 +206,7 @@ section button strong {
 }
 @media (max-width: 600px) {
     .grid { grid-template-columns: 50% 50%; }
-    section { margin: 8px; }
+    section { margin: 8px; padding: 12px; }
 }
 @media (max-width: 450px) {
     .grid { 
@@ -216,6 +216,7 @@ section button strong {
     section { margin: 8px 0px; }
 }
 @media (max-width: 350px) {
+    section { padding: 6px;}
     section button {
         padding: 0 8px;
         border-radius: 50%;

@@ -40,7 +40,7 @@ app.get("/", function (req, res) {
     res.render("home");
 });
 app.get("/home/:domain", (req, res) => {
-    res.render("userHome", {data: req.params['domain']})
+    res.render("userhome", {data: req.params['domain']})
 });
 app.get("/signin/:url", (req, res) => {
     res.render("signin", {data: req.params['url']})
