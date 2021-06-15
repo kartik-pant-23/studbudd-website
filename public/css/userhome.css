@@ -87,7 +87,7 @@ section button strong {
     margin: 24px 0;
     align-items: center;
 }
-.progress {
+.progress-imp {
     margin: 0 16px;
     font-size: 0.75em;
     text-align: center;
@@ -181,6 +181,14 @@ section button strong {
     text-align: center;
     font-size: 0.8em;
     color: rgba(0, 0, 0, 0.5);
+}
+
+a{
+    text-decoration: none;
+}
+a:hover{
+    text-decoration: underline;
+    color: #3498db;
 }
 
 /* Responsive */

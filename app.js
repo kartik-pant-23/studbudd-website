@@ -48,7 +48,9 @@ app.get("/signin/:url", (req, res) => {
 app.get("/register/:choice", (req,res) => {
     res.render("register", { choice: req.params['choice'] });
 })
-
+app.get("/error", (req, res) => {
+    res.render("error");
+})
 
 //Backend code
 
