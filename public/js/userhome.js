@@ -7,10 +7,11 @@ var token = window.localStorage.getItem("token");
 
 // Creating necessary elements
 var batchContainer = function(tag, classCount) {
-    var container = document.createElement('div', { class: "grid-container batch-container" });
-    var details = document.createElement('div');
-    details.innerHTML = `<div id="batch-details"><div id="batch-head">${tag}</div><div id="batch-subhead"><strong id="class-count">${classCount}</strong> </div></div>`;
-    container.appendChild(details);
+    var container = document.createElement('div');
+    container.classList.add('grid-container');
+    container.classList.add('batch-container');
+    container.innerHTML = `<div id="batch-details"><div id="batch-head">${tag}</div><div id="batch-subhead">Classes Count:<strong id="class-count">${classCount}</strong> </div></div>`;
+    // container.appendChild(details);
     return container;
 }
 
@@ -48,12 +49,12 @@ function updateUI(data) {
     else $("documentprogress").style.backgroundColor = 'red';
 
     // Adding documents details
-    if(documentPercent==0) {
-        $("docs").style.display = 'none';
-        $("empty-doc").style.display = 'block'
-    } else {
-        // loadDocumentsData();
-    }
+    // if(documentPercent==0) {
+    //     $("docs").style.display = 'none';
+    //     $("empty-doc").style.display = 'block'
+    // } else {
+    //     // loadDocumentsData();
+    // }
 }
 
 var loadData = function() {
