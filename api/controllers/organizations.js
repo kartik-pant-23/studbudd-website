@@ -66,27 +66,29 @@ exports.login = function (req, res) {
             if (org) {
                 org.comparePassword(req.body.password, (err, matched) => {
                     if (err) {
-                        errorHandler(res, err);
-                    } else if (!matched || !org.verified) {
-                        errorHandler(res, auth_error);
+                        res.status(500).json({message: "Something went wrong!", debug: err});
+                    } else if (!org.verified) {
+                        res.status(401).json({message: "Check your email for verification link!"})
+                    } else if (!matched) {
+                        res.status(401).json({message: "Authentication failed!"})
                     } else {
                         org.generateToken((err, token) => {
                             if (err) {
-                                errorHandler(res, err)
+                                res.status(500).json({message: "Something went wrong!", debug: err})
                             } else {
                                 res.status(200).json({
                                     message: "Login successful!",
                                     token: token,
-                                    details: org
+                                    domain: org.domain
                                 })
                             }
                         });
                     }
                 })
             } else {
-                errorHandler(res, auth_error);
+                res.status(401).json({message: "Requested user was not found!"})
             }
-        }).catch(err => errorHandler(res, err));
+        }).catch(err => res.status(500).json({message: "Something went wrong!", debug: err}));
 }
 
 // Email verification for registration
