@@ -32,6 +32,7 @@ exports.uploadDocument = (req, res) => {
                 const document = Document({
                     _id: _id,
                     tag: req.body.tag,
+                    description: req.body.description,
                     key: file.originalname,
                     url: url,
                     ref: ref,

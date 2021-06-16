@@ -4,6 +4,7 @@ const Class = require('../models/class')
 
 const DocumentSchema = mongoose.Schema({
     tag: {type: String, default: "Untitled", trim: true },
+    description: { type: String, trim: true },
     url: {type: String, required: true},
     key: {type: String, required: true},
     ref: {type: mongoose.SchemaTypes.ObjectId, required: true},

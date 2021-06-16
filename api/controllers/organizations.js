@@ -1,6 +1,7 @@
 const Organization = require("../models/organization");
 const User = require("../models/user")
 const Class = require("../models/class")
+const Document = require("../models/document");
 
 const errorHandler = require("../../middleware/error_handler")
 const emailHandler = require("../../middleware/emails");
@@ -12,24 +13,50 @@ const bcryptjs = require("bcryptjs");
 const auth_error = new Error('Authentication failed!');
 auth_error.status = 401;
 
-// Get all general info about organization
+// Get short info for home page
 exports.getInfo = (req, res) => {
+    const reqFields = 'name domain studentsCount maxStudentsCount documentsSize maxDocumentsSize batches dueDate';
     Organization.findById(req.user._id)
-        .populate('faculty', 'name email')
-        .exec()
-        .then(org => {
-            if (org) {
-                res.status(200).json({
-                    message: "Organization found!",
-                    details: org
+    .select(reqFields)
+    .exec()
+    .then(org => {
+        if(org) {
+            var dateNow = new Date();
+            dateNow.setDate(dateNow.getDate()-5);
+            if(org.dueDate.getTime() > dateNow.getTime()) {
+                Document.find({ref: org._id}).select('tag').exec()
+                .then(docs => {
+                    res.status(200).json({
+                        message: "Organization found!",
+                        details: org,
+                        documents: docs
+                    });
                 })
+                .catch(err => errorHandler(res,err));
             } else {
-                var err = new Error('Not found!');
-                err.status = 404;
-                errorHandler(res, err);
+                res.status(402).json({
+                    message: "Monthly bill not paid! Services are getting stopped until next payment!",
+                    dueDate: org.dueDate
+                })
             }
-        })
-        .catch(err => errorHandler(res, err));
+        } else {
+            res.status(404).json({
+                message: "Organization not found!"
+            });
+        }
+    })
+    .catch(err => errorHandler(res,err));
+}
+// Get detailed info about organization
+exports.orgDetails = (req,res) => {
+    Organization.findById(req.user._id)
+    .select('-batches')
+    .exec()
+    .then(org => {
+        if(org) res.status(200).json(org);
+        else res.status(404).json({ message: "Organization not found!" });
+    })
+    .catch(err => errorHandler(res,err));
 }
 
 // Register an organization
@@ -256,28 +283,33 @@ exports.deleteFaculty = (req, res) => {
 exports.addBatch = (req, res) => {
     Organization.findById(req.user._id).exec()
         .then(org => {
-            if (org.batches.find(obj => { return obj.tag == req.body.tag })) {
-                res.status(409).json({
-                    message: "Conflict: Batch already exists!",
-                    batches: org.batches
-                })
-            } else {
-                req.body._id = new mongoose.Types.ObjectId();
-                req.body.classes = [];
-                org.updateOne({ $push: { batches: req.body } }, { new: true }).exec()
-                    .then(update => {
-                        if (update.ok == 1) {
-                            res.status(200).json({
-                                message: "Batch added!",
-                                batch: req.body
-                            })
-                        } else {
-                            res.status(500).json({
-                                message: "Something went wrong!"
-                            })
-                        }
+            if(org) {
+                if (org.batches.find(obj => { return obj.tag == req.body.tag })) {
+                    res.status(409).json({
+                        message: "Conflict: Batch already exists!",
+                        batches: org.batches
                     })
-                    .catch(err => errorHandler(res, err));
+                } else {
+                    const batch = {
+                        _id: new mongoose.Types.ObjectId(),
+                        tag: req.body.tag,
+                        classCount: 0
+                    }
+                    org.updateOne({ $push: { batches: batch } }, { new: true }).exec()
+                        .then(update => {
+                            if (update.ok == 1) {
+                                res.status(200).json({
+                                    message: "Batch added!",
+                                    batch: batch
+                                })
+                            } else {
+                                errorHandler(res,err);
+                            }
+                        })
+                        .catch(err => errorHandler(res, err));
+                }
+            } else {
+                res.status(404).json({ message: "Organization not found!" })
             }
         })
         .catch(err => errorHandler(res, err));

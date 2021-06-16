@@ -47,4 +47,8 @@ function signin() {
 
 window.onload = function() {
     $("signin-btn").onclick = signin;
+    if(url!="org") {
+        $("reset-pass").style.display = "none";
+        $("footer-link").style.display = "none";
+    }
 }

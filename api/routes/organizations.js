@@ -6,6 +6,7 @@ const controller = require("../controllers/organizations")
 const { upload, get_data } = require('../../middleware/files_upload');
 
 router.get('/', auth, controller.getInfo);
+router.get('/details', auth, controller.orgDetails);
 
 router.post('/register', controller.register);
 router.get('/verify_email/:token', controller.verifyEmail);

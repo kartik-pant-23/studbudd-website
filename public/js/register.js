@@ -64,7 +64,7 @@ var next3 = function() {
             maxFacultyCount = 2;
             maxStudentsCount = 50;
             maxAssignmentsCount = 5;
-            maxDocumentsSize = 256 * 1024;
+            maxDocumentsSize = 256 * 1024 * 1024;
             maxExamsCount = 5;
             break;
 
@@ -73,7 +73,7 @@ var next3 = function() {
             maxFacultyCount = 10;
             maxStudentsCount = 250;
             maxAssignmentsCount = 10;
-            maxDocumentsSize = 2 * 1024 * 1024;
+            maxDocumentsSize = 512 * 1024 * 1024;
             maxExamsCount = 10;
             break;
     
@@ -82,7 +82,7 @@ var next3 = function() {
             maxFacultyCount = 20;
             maxStudentsCount = 500;
             maxAssignmentsCount = 20;
-            maxDocumentsSize = 5 * 1024 * 1024;
+            maxDocumentsSize = 1024 * 1024 * 1024;
             maxExamsCount = 20;
             break;
     }

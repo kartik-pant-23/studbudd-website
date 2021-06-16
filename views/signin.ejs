@@ -59,13 +59,13 @@
               </span> 
               <form id="stripe-login">
                 <div class="field padding-bottom--24">
-                  <label for="email">Email</label>
+                  <label for="email"><%= (data && data=='org') ?'Email or organization domain' :'Email'%></label>
                   <input id="userId" type="email" name="email">
                 </div>
                 <div class="field padding-bottom--24">
                   <div class="grid--50-50">
                     <label for="password">Password</label>
-                    <div class="reset-pass">
+                    <div id="reset-pass" class="reset-pass">
                       <a href="#">Forgot your password?</a>
                     </div>
                   </div>
@@ -78,7 +78,7 @@
               </form>
             </div>
           </div>
-          <div class="footer-link padding-top--24">
+          <div id="footer-link" class="footer-link padding-top--24">
             <span>Don't have an account? <a href="/register/2">Sign up</a></span>
             <div class="listing padding-top--24 padding-bottom--24 flex-flex center-center">
             </div>

@@ -13,6 +13,9 @@ h1 {
     text-overflow: ellipsis;
     transition: 1s;
 }
+h1,h2,h3,h4,h5,h6 {
+    font-weight: 700;
+}
 
 button {
     cursor: pointer;
@@ -125,6 +128,7 @@ section button strong {
     transition: box-shadow 0.3s ease-in-out;
     cursor: pointer;
     overflow: hidden;
+    color: black;
 }
 .grid-container:hover {
     box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.20);
@@ -185,10 +189,6 @@ section button strong {
 
 a{
     text-decoration: none;
-}
-a:hover{
-    text-decoration: underline;
-    color: #3498db;
 }
 
 /* Responsive */
