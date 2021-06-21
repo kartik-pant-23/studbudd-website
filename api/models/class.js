@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
+const Organization = require("./organization")
 
 const classSchema = mongoose.Schema({
-    org: { type: mongoose.SchemaTypes.ObjectId, ref: "Organization", required: true },
     batch: { type: mongoose.SchemaTypes.ObjectId, required: true },
     tag: { type: String, required: true, trim: true  },
     subjects: [{
@@ -12,10 +12,21 @@ const classSchema = mongoose.Schema({
             ref: "User" 
         },
     }],
-    students: [{
-        type: mongoose.SchemaTypes.ObjectId, 
-        ref: "User"
-    }]
+    studentsCount: { type: Number, default: 0 }
 }, {timestamps: true});
+
+classSchema.pre('save', function (next) {
+    var _obj = this;
+    if(_obj.batch && _obj.tag) {
+        Organization.findOneAndUpdate(
+            { "batches._id": _obj.batch },
+            { $inc: { 'batches.$.classCount': 1 } }
+        ).exec()
+        .then(_ => next())
+        .catch(err => next(err));
+    } else {
+        next(new Error("Missing required fields!"));
+    }
+})
 
 module.exports = mongoose.model('Class', classSchema);

@@ -1,8 +1,44 @@
-<header id="navbar">
-    <img id="navlogo" src="/images/logo-dark.png" alt="">
-    <div id="navlinks">
-        <button>Marketplace<img id="navicon" src="/images/icons/cart.png" alt=""></button>
-        <button>Add Faculty <img id="navicon" src="/images/icons/add-faculty.png" alt=""></button>
-        <button><%=domain%><img id="navicon" src="/images/icons/profile.png" alt=""></button>
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" style="display: inline-flex; align-items: flex-end;">
+            <img src="/images/icon.png" height="32px" alt="">
+            Studbudd
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" style="text-align: right;" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto" style="margin-left: auto;">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        Marketplace
+                        <img src="/images/icons/cart.png" height="18px" alt="">
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">
+                        Add Faculty
+                        <img src="/images/icons/add-faculty.png" height="18px" alt="">
+                    </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="dropdown-toggle nav-link active" id="dropdownMenuButton" data-toggle="dropdown" style="cursor: pointer;" aria-haspopup="true" aria-expanded="false">
+                        <span id="nav-domain"></span>
+                        <!-- <img src="/images/icons/profile.png" height="18px" alt=""> -->
+                    </a>
+                    <ul class="dropdown-menu" style="position: fixed; right: 12px;" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="#">Billing Dashboard</a></li>
+                        <hr class="dropdown-divider">
+                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
-</header>
+    <script>
+        var domain = window.localStorage.getItem("org-domain") || "";
+        document.getElementById("nav-domain").innerText = domain;
+    </script>
+</nav>

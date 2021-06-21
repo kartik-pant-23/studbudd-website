@@ -3,51 +3,47 @@ const Class = require('../models/class');
 
 const errorHandler = require('../../middleware/error_handler');
 const Organization = require('../models/organization');
+const Document = require('../models/document');
 
-// Add a new classes
-exports.addClasses = (req, res) => {
-    const classesToAdd = req.body.classes;
-    const classes = [];
-
-    classesToAdd.forEach(obj => {
-        classes.push(Class({
-            org: req.user._id,
-            batch: req.params['_batchId'],
-            tag: obj.tag,
-            subjects: obj.subjects,
-            students: obj.students
-        }))
-    })
-
-    Class.insertMany(classes)
-        .then(docs => {
-            insertedClassesId = docs.map(obj => { return obj._id; })
-            Organization.findOneAndUpdate(
-                {
-                    _id: req.user._id,
-                    'batches._id': req.params['_batchId']
-                },
-                { $push: { 'batches.$.classes': { $each: insertedClassesId } } },
-                { new: true }
-            ).exec()
-                .then(updatedOrg => res.status(200).json({
-                    count: classes.length,
-                    addedClassesCount: docs.length,
-                    addedClasses: docs,
-                    updatedOrg: updatedOrg
-                }))
-                .catch(err => errorHandler(res, err))
-        })
-        .catch(err => errorHandler(res, err));
-}
-// Get details of a class
-exports.getClassDetails = (req, res) => {
-    Class.findById(req.params['_id'])
-        .populate('students subjects.coordinator', 'name email')
-        .select('-org -batch')
+exports.getClassesInBatch = (req,res) => {
+    Organization.findOne(
+        {"batches._id": req.params['_batchId']}
+    ).select('batches')
+    .exec()
+    .then(org => {
+        var batch = org.batches.find(obj => obj._id == req.params['_batchId']);
+        Class.find({batch: req.params['_batchId']})
+        .select('tag subjects studentsCount')
         .exec()
-        .then(details => res.status(200).json(details))
-        .catch(err => errorHandler(res, err));
+        .then(data => {
+            Document.find({ref: req.params['_batchId']})
+            .select('tag')
+            .exec()
+            .then(docs => res.status(200).json({
+                _batchId: batch._id,
+                tag: batch.tag,
+                classCount: batch.classCount,
+                classes: data,
+                documents: docs
+            }))
+            .catch(err => errorHandler(res,err));
+        })
+        .catch(err => errorHandler(res,err));
+    })
+    .catch(err => errorHandler(res,err));
+}
+
+// Add a new class
+exports.addClass = (req, res) => {
+    const { tag, subjects } = req.body;
+    const classObject = Class({
+        tag: tag,
+        subjects: subjects,
+        batch: req.params['_batchId']
+    });
+    classObject.save()
+    .then(data => res.status(200).json(data))
+    .catch(err => errorHandler(res,err));
 }
 // Update class
 exports.updateClass = (req, res) => {

@@ -5,14 +5,14 @@ var $ = function(id) {
 }
 var token = window.localStorage.getItem("token");
 const baseUrl = window.location.origin;
-const orgDomain = window.location.pathname.split('/').reverse()[0];
+var orgDomain;
 var batches = [], docs = [];
 var org;
 
 // Creating batch container
 var batchContainer = function(batch) {
     var container = document.createElement('a');
-    container.href = `/org/${orgDomain}/${batch._id}`;
+    container.href = `/batch/${batch._id}`;
     container.innerHTML = `<div class="grid-container batch-container"><div id="batch-details"><div id="batch-head">${batch.tag}</div><div id="batch-subhead">Classes Count: <strong id="class-count">${batch.classCount}</strong> </div></div></div>`;
     return container;
 }
@@ -20,7 +20,7 @@ var batchContainer = function(batch) {
 // Creating doc container
 var docContainer = function(doc) {
     var container = document.createElement('a');
-    container.href = `/org/${orgDomain}/document/${doc._id}`;
+    container.href = `/document/${doc._id}`;
     container.innerHTML = `<div class="grid-container doc-container"><img src="/images/doc-template.png" alt="" id="doc-img"><div id="doc-head">${doc.tag}</div></div>`;
     return container;
 }
@@ -50,6 +50,8 @@ function addNewDoc() {
             $("add-doc-btn").innerText = "Confirm";
             $("add-doc-btn").disabled = false;
             response.json().then(data => {
+                $("docs").style.display = "grid";
+                $("empty-doc").style.display = "none";
                 $("docs").appendChild(docContainer(data.document));
                 tag.value = null;
                 desc.value = null;
@@ -84,6 +86,8 @@ function addNewBatch() {
                 }
             })
             .then(response => {
+                $("batches").style.display = "grid";
+                $("empty-batch").style.display = "none";
                 $("add-batch-btn").innerText = "Confirm";
                 $("add-batch-btn").disabled = false;
                 response.json().then(data => {
@@ -114,6 +118,7 @@ function updateUI(data) {
     org = data.details;
     // Setting name
     $("org-name").innerHTML = org.name;
+    document.title = `${org.domain} | Studbudd`
 
     // Setting batches progress
     var studentPercent = 100*org.studentsCount / org.maxStudentsCount;
@@ -165,6 +170,8 @@ var loadData = function() {
     }).then(res => {
         if(res.status == 200) {
             res.json().then(data => {
+                orgDomain = data.details.domain;
+                localStorage.setItem("org-domain", orgDomain);
                 updateUI(data);
             }).catch(err => {
                 console.log(err);
@@ -185,5 +192,4 @@ var loadData = function() {
 
 window.onload = function(){
     loadData();
-    // $("add-new-batch").onclick = addNewBatch();
 }

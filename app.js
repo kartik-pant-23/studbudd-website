@@ -39,14 +39,17 @@ connectDB();
 app.get("/", function (req, res) {
     res.render("home");
 });
-app.get("/org/:domain", (req, res) => {
-    res.render("orghome", {data: req.params['domain']})
-});
 app.get("/signin/:url", (req, res) => {
     res.render("signin", {data: req.params['url']})
 })
 app.get("/register/:choice", (req,res) => {
     res.render("register", { choice: req.params['choice'] });
+})
+app.get("/org/:domain", (req, res) => {
+    res.render("orghome", {data: req.params['domain']})
+});
+app.get("/batch/:_id", (req, res) => {
+    res.render("batch")
 })
 app.get("/error", (req, res) => {
     res.render("error");
