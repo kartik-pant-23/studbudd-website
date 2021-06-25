@@ -25,13 +25,12 @@
                 <li class="nav-item dropdown">
                     <a class="dropdown-toggle nav-link active" id="dropdownMenuButton" data-toggle="dropdown" style="cursor: pointer;" aria-haspopup="true" aria-expanded="false">
                         <span id="nav-domain"></span>
-                        <!-- <img src="/images/icons/profile.png" height="18px" alt=""> -->
                     </a>
                     <ul class="dropdown-menu" style="position: fixed; right: 12px;" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="#">Profile</a></li>
+                        <li><a class="dropdown-item" href="/profile">Profile</a></li>
                         <li><a class="dropdown-item" href="#">Billing Dashboard</a></li>
                         <hr class="dropdown-divider">
-                        <li><a class="dropdown-item" href="#">Logout</a></li>
+                        <li><a class="dropdown-item" onclick="logout()">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -40,5 +39,8 @@
     <script>
         var domain = window.localStorage.getItem("org-domain") || "";
         document.getElementById("nav-domain").innerText = domain;
+        function logout() {
+            console.log("Logout clicked!");
+        }
     </script>
 </nav>

@@ -36,24 +36,16 @@ connectDB();
 
 //Frontend code
 
-app.get("/", function (req, res) {
-    res.render("home");
-});
-app.get("/signin/:url", (req, res) => {
-    res.render("signin", {data: req.params['url']})
-})
-app.get("/register/:choice", (req,res) => {
-    res.render("register", { choice: req.params['choice'] });
-})
-app.get("/org/:domain", (req, res) => {
-    res.render("orghome", {data: req.params['domain']})
-});
-app.get("/batch/:_id", (req, res) => {
-    res.render("batch")
-})
-app.get("/error", (req, res) => {
-    res.render("error");
-})
+app.get("/", (req, res) => res.render("home"));
+app.get("/signin/:url", (req, res) => 
+    res.render("signin", {data: req.params['url']}));
+app.get("/register/:choice", (req,res) => 
+    res.render("register", { choice: req.params['choice'] }));
+app.get("/org/:domain", (req, res) => 
+    res.render("orghome", {data: req.params['domain']}));
+app.get("/batch/:_id", (req, res) => res.status(200).render("batch"));
+app.get("/profile", (req,res) => res.status(200).render('profile'));
+app.get("/error", (req, res) => res.render("error"));
 
 //Backend code
 
