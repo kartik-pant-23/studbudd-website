@@ -4,6 +4,7 @@ const connectDB = require('./middleware/db')
 const ejs = require("ejs");
 
 const orgRouter = require('./api/routes/organizations');
+const facultyRouter = require('./api/routes/faculties');
 const usersRouter = require('./api/routes/users');
 const classesRouter = require('./api/routes/classes');
 const documentsRouter = require('./api/routes/documents');
@@ -58,6 +59,7 @@ app.get('/api', (req, res) => {
     })
 })
 app.use('/api/org', orgRouter);
+app.use('/api/faculty', facultyRouter);
 app.use('/api/user', usersRouter);
 app.use('/api/class', classesRouter);
 app.use('/api/document', documentsRouter);

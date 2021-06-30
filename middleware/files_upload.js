@@ -33,32 +33,34 @@ const upload = multer({
 exports.upload = upload.single('contentFile');
 
 exports.get_data = function (req, res, next) {
-    const path = req.file.path;
-    fs.readFile(path, 'utf8', (err, data) => {
-        if(err) {
-            return next(err);
-        } else {
-            try {
-                let parsedData = data.split('\n');
-                const usersList = []
-                parsedData.forEach( userData => {
-                    if(userData) {
-                        var uid = userData.split(',')[0].trim();
-                        var name = userData.split(',')[1].trim();
-                        usersList.push({
-                            name: name,
-                            uid: uid
-                        });
-                    }
-                })
-                req.body.users = usersList;
-                next();
-            } catch(err) {
-                err.message = "Some error in reading the uploaded file!"
+    if(req.file) {
+        const path = req.file.path;
+        fs.readFile(path, 'utf8', (err, data) => {
+            if(err) {
                 return next(err);
+            } else {
+                try {
+                    let parsedData = data.split('\n').splice(1,data.length-1);
+                    const usersList = []
+                    parsedData.forEach( userData => {
+                        if(userData) {
+                            var uid = userData.split(',')[0].trim();
+                            var name = userData.split(',')[1].trim();
+                            usersList.push({
+                                name: name,
+                                uid: uid
+                            });
+                        }
+                    })
+                    req.body.users = usersList;
+                    next();
+                } catch(err) {
+                    err.message = "Some error in reading the uploaded file!"
+                    return next(err);
+                }
             }
-        }
-    })
+        })
+    } else next();
 }
 
 exports.uploadDoc = multer({

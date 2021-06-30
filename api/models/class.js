@@ -9,7 +9,7 @@ const classSchema = mongoose.Schema({
         subjectCode: { type: String },
         coordinator: { 
             type: mongoose.SchemaTypes.ObjectId, 
-            ref: "User" 
+            ref: "Faculty" 
         },
     }],
     studentsCount: { type: Number, default: 0 }
