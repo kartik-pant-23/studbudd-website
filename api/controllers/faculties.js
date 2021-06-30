@@ -3,6 +3,9 @@ const Faculty = require("../models/faculty");
 const Organization = require("../models/organization");
 const Class = require("../models/class");
 const bcryptjs = require("bcryptjs");
+const path = require("path");
+
+const { uploadS3 } = require("../../middleware/files_upload");
 
 exports.register = (req, res) => {
     const usersData = req.body.users;
@@ -136,4 +139,49 @@ exports.changePassword = (req, res) => {
         }
     })
     .catch(err => error_handler(res,err));
+}
+
+exports.patch = (req, res) => {
+    const { qualification, details, newPassword, flag_show } = req.body;
+    const file = req.file;
+    if(file) {
+        const extName = path.extname(file.originalname);
+        file.originalname = req.user.domain+'/faculty/'+req.params['_id']+extName;
+    }
+    Faculty.findById(req.params['_id'])
+    .select('org _id')
+    .exec()
+    .then(faculty => {
+        if(faculty) {
+            if(faculty._id==req.user._id || faculty.org==req.user._id) {
+                var update = {};
+                if(qualification) update.qualification = qualification;
+                if(details) update.details = details;
+                if(newPassword && req.user.role == 'org') update.password = bcryptjs.hashSync(newPassword, 10);
+                if(flag_show) update.flag_show = flag_show;
+                if(file) {
+                    uploadS3(req.user.domain, file, (err, url) => {
+                        if(err) error_handler(res, err);
+                        else {
+                            update.img_url = url;
+                            Faculty.findByIdAndUpdate(faculty._id, update, {new: true})
+                            .exec()
+                            .then(updatedFaculty => res.json(updatedFaculty))
+                            .catch(err => error_handler(res, err));
+                        }
+                    })
+                } else {
+                    Faculty.findByIdAndUpdate(faculty._id, update, {new: true})
+                    .exec()
+                    .then(updatedFaculty => res.json(updatedFaculty))
+                    .catch(err => error_handler(res, err));
+                }
+            } else {
+                res.status(401).json({ message: "Authentication failed!" });
+            }
+        } else {
+            res.status(404).json({ message: "User does not exist!" });
+        }
+    })
+    .catch(err => error_handler(res, err));
 }
