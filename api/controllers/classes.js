@@ -1,9 +1,8 @@
-const mongoose = require('mongoose');
 const Class = require('../models/class');
 
-const errorHandler = require('../../middleware/error_handler');
 const Organization = require('../models/organization');
 const Document = require('../models/document');
+const error_handler = require('../../middleware/error_handler');
 
 exports.getClassesInBatch = (req,res) => {
     Organization.findOne(
@@ -26,11 +25,11 @@ exports.getClassesInBatch = (req,res) => {
                 classes: data,
                 documents: docs
             }))
-            .catch(err => errorHandler(res,err));
+            .catch(err => error_handler(res,err));
         })
-        .catch(err => errorHandler(res,err));
+        .catch(err => error_handler(res,err));
     })
-    .catch(err => errorHandler(res,err));
+    .catch(err => error_handler(res,err));
 }
 
 // Add a new class
@@ -43,8 +42,30 @@ exports.addClass = (req, res) => {
     });
     classObject.save()
     .then(data => res.status(200).json(data))
-    .catch(err => errorHandler(res,err));
+    .catch(err => error_handler(res,err));
 }
+
+// Get details of a class
+exports.getClassDetails = (req, res) => {
+    Class.findById(req.params['_id'])
+    .populate("subjects.coordinator", "name email")
+    .exec()
+    .then(classDetails => {
+        if(classDetails) {
+            Document.find({ ref: classDetails._id }).exec()
+            .then(docs => {
+                res.status(200).json({
+                    class: classDetails,
+                    documents: docs
+                })
+            })
+        } else {
+            res.status(404).json({ message: "Class does not exist!" });
+        }
+    })
+    .catch(err => error_handler(res, err));
+}
+
 // Update class
 exports.updateClass = (req, res) => {
     const update = { $set: {}, $push: {} };
@@ -64,7 +85,7 @@ exports.updateClass = (req, res) => {
         },
         update,
         { new: true })
-        .select('-org -batch')
+        .select('-batch')
         .exec()
         .then(updatedClass => {
             res.status(200).json({
@@ -72,8 +93,30 @@ exports.updateClass = (req, res) => {
                 updatedClass: updatedClass
             })
         })
-        .catch(err => errorHandler(res, err));
+        .catch(err => error_handler(res, err));
 }
+
+// Update a subjects details
+exports.patchSubject = (req, res) => {
+    const subjectId = req.params['_id'];
+    const { name, subjectCode, coordinator } = req.body;
+
+    const update = { };
+    if(name) update['subjects.$.name'] = name;
+    if(subjectCode) update['subjects.$.subjectCode'] = subjectCode;
+    if(coordinator && req.user.role == 'org') update['subjects.$.coordinator'] = coordinator;
+
+    Class.findOneAndUpdate(
+        { 'subjects._id': subjectId },
+        { $set: update },
+        { new: true }
+    )
+    .populate("subjects.coordinator", "name email")
+    .exec()
+    .then(updateClass => res.status(200).json(updateClass))
+    .catch(err => error_handler(res, err));
+}
+
 // Delete class 
 exports.deleteClass = (req, res) => {
     Class.findById(req.params['_id']).exec()
@@ -82,7 +125,7 @@ exports.deleteClass = (req, res) => {
                 const { org, batch, _id } = obj;
                 obj.deleteOne({ _id: _id }, (err, _) => {
                     if (err) {
-                        errorHandler(res, err);
+                        error_handler(res, err);
                     } else {
                         // Remove entry from Organization as well
                         Organization.findOneAndUpdate(
@@ -96,7 +139,7 @@ exports.deleteClass = (req, res) => {
                                     updatedOrg: updatedOrg
                                 })
                             })
-                            .catch(err => errorHandler(res, err));
+                            .catch(err => error_handler(res, err));
                     }
                 })
             } else {
@@ -105,5 +148,5 @@ exports.deleteClass = (req, res) => {
                 })
             }
         })
-        .catch(err => errorHandler(res, err));
+        .catch(err => error_handler(res, err));
 }
