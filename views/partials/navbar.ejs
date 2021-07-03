@@ -1,4 +1,4 @@
-<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark" style="font-weight:500;">
     <div class="container-fluid">
         <a class="navbar-brand" style="display: inline-flex; align-items: flex-end;">
             <img src="/images/icon.png" height="32px" alt="">
@@ -17,7 +17,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#">
+                    <a class="nav-link active" href="/add_faculty">
                         Add Faculty
                         <img src="/images/icons/add-faculty.png" height="18px" alt="">
                     </a>
@@ -26,7 +26,7 @@
                     <a class="dropdown-toggle nav-link active" id="dropdownMenuButton" data-toggle="dropdown" style="cursor: pointer;" aria-haspopup="true" aria-expanded="false">
                         <span id="nav-domain"></span>
                     </a>
-                    <ul class="dropdown-menu" style="position: fixed; right: 12px;" aria-labelledby="dropdownMenuButton">
+                    <ul class="dropdown-menu" style="float: right;" aria-labelledby="dropdownMenuButton">
                         <li><a class="dropdown-item" href="/profile">Profile</a></li>
                         <li><a class="dropdown-item" href="#">Billing Dashboard</a></li>
                         <hr class="dropdown-divider">
@@ -40,7 +40,50 @@
         var domain = window.localStorage.getItem("org-domain") || "";
         document.getElementById("nav-domain").innerText = domain;
         function logout() {
+            window.localStorage.clear();
+            window.location.href = '/';
             console.log("Logout clicked!");
         }
     </script>
 </nav>
+<!-- <nav class="navbar fixed-top navbar-expand-lg navbar-dark bg-dark container-fluid">
+    <a class="navbar-brand" style="display: inline-flex; align-items: flex-end;">
+        <img src="/images/icon.png" height="32px" alt="">
+        Studbudd
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a href="/marketplace" class="nav-link active">Marketplace</a>
+            </li>
+            <li class="nav-item">
+                <a href="/add_faculty" class="nav-link active">Add Faculty</a>
+            </li>
+            <li class="nav-item">
+                <div class="dropdown">
+                    <a class="btn btn-secondary dropdown-toggle btn btn-dark" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span id="nav-domain"></span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton"  style="position: fixed; right: 12px;">
+                        <a class="dropdown-item" href="/profile">Profile</a>
+                        <a class="dropdown-item" href="#">Billing Dashboard</a>
+                        <hr class="dropdown-divider">
+                        <a class="dropdown-item" onclick="logout()">Logout</a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <script>
+        var domain = window.localStorage.getItem("org-domain") || "";
+        document.getElementById("nav-domain").innerText = domain;
+        function logout() {
+            window.localStorage.clear();
+            window.location.href = '/';
+            console.log("Logout clicked!");
+        }
+    </script>
+</nav> -->

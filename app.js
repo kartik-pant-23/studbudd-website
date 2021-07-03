@@ -44,7 +44,7 @@ app.get("/register/:choice", (req,res) =>
 app.get("/org/:domain", (req, res) => 
     res.render("orghome", {data: req.params['domain']}));
 app.get("/batch/:_id", (req, res) => res.status(200).render("batch"));
-app.get("/profile", (req,res) => res.status(200).render('profile'));
+app.get('/add_faculty', (req, res) => res.render("addFaculty"));
 app.get("/error", (req, res) => res.render("error"));
 
 //Backend code
@@ -63,6 +63,8 @@ app.use('/api/student', studentsRouter);
 app.use('/api/class', classesRouter);
 app.use('/api/document', documentsRouter);
 app.use('/api/assignment', assignmentsRouter);
+app.get('/sample_faculty', (req, res) => 
+    res.download(__dirname+'/assets/teachers_data.csv'))
 
 // Handle 404 error
 app.use((req, res) => {

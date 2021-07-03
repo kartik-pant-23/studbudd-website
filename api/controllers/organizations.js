@@ -227,7 +227,10 @@ exports.deleteBatch = (req, res) => {
 
 // Faculty routes
 exports.getAllFaculty = (req, res) => {
-    Faculty.find({ org: req.user._id }).exec()
+    Faculty.find({ org: req.user._id })
+    .select('name email img_url details qualification flag_show')
+    .sort({_id: -1})
+    .exec()
     .then(faculty => res.status(200).json({
         count: faculty.length,
         faculty: faculty

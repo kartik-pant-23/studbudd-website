@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include("partials/bootstrap") -%>
+        <link rel="stylesheet" href="/css/addFaculty.css">
+        <title>Add Faculty | Studbudd</title>
+</head>
+
+<body>
+    <%- include("partials/navbar") -%>
+    <main>
+        <div class="faculty-details">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="card" id="all-faculties">
+                        <h3 class="card-head">Faculty</h3>
+                        <p style="padding-left:10px;">Data about the faculty that you add is also shown on the landing
+                            screen of your organization!</p>
+                            <%- include("partials/empty", { id: 'empty-faculty' }) -%>
+                    </div>
+                </div>
+                <div class="col-sm-5">
+                    <div class="card">
+                        <h3 class="card-head">Add Faculty</h3>
+                        <br>
+                        <div class="mb-5">
+                            <div>Suited if you wish to add only 2-3 teachers. You will have to add uid and name.</div>
+                            <button class="btn btn-primary">Add Manually</button>
+                        </div>
+                        <div class="mb-5">
+                            <div>Suited if you wish to add many teachers, you will have to add .csv file.</div>
+                            <button class="btn btn-primary">Add Bulk</button>
+                            <a href="/sample_faculty"><button class="btn btn-outline-primary">Download Sample</button></a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        <!-- Edit faculty modal -->
+        <div class="modal fade" id="faculty-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add New Faculty</h5>
+                        <button id="close-fac-modal" type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div class="preview-container">
+                                <img id="fac-img-modal" height="100px" width="100px">
+                                &nbsp;&nbsp;
+                                <div class="preview-details">
+                                    <div id="fac-name-modal"></div>
+                                    <div id="fac-email-modal"></div>
+                                    <input type="file" name="fac-image" id="fac-image" accept="image/*" onchange="loadImage(event)">
+                                    <label id="image-picker" for="fac-image">Choose Image</label><br>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="col-form-label">New Password</label>
+                            <input type="text" name="password" id="fac-password-modal" class="form-control">
+
+                            <label for="qualifications" class="col-form-label">Qualifications</label>
+                            <input type="text" name="qualifications" id="fac-qual-modal" class="form-control">
+
+                            <label for="description" class="col-form-label">Description</label>
+                            <textarea type="text" name="description" id="fac-desc-modal" class="form-control" placeholder="Anything you want to show on website.."></textarea>
+
+                            <input type="checkbox" id="fac-flag-modal">
+                            <label for="flag_show">Show on landing page</label><br>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="save-changes-btn" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+    
+    <%- include("partials/footer") -%>
+    <script src="/js/addFaculty.js"></script>
+</body>
+</html>
