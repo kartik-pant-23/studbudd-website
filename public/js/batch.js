@@ -102,9 +102,6 @@ function addNewClass() {
                     $("empty-class").style.display = "none";
                     $("classes").appendChild(classContainer(data));
 
-                    $("add-class-btn").innerText = "Confirm";
-                    $("add-class-btn").disabled = false;
-
                     $("new-class-tag").value = null;
                     clearSubjects();
                     $("close-class-modal").click();
@@ -112,10 +109,14 @@ function addNewClass() {
             } else {
                 alert("Something went wrong!");
             }
+            $("add-class-btn").innerText = "Confirm";
+            $("add-class-btn").disabled = false;
         })
         .catch(err => {
             console.log(err);
             alert("Something went wrong!")
+            $("add-class-btn").innerText = "Confirm";
+            $("add-class-btn").disabled = false;
         })
     }
 }

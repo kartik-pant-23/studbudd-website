@@ -26,20 +26,24 @@
                         <br>
                         <div class="mb-5">
                             <div>Suited if you wish to add only 2-3 teachers. You will have to add uid and name.</div>
-                            <button class="btn btn-primary">Add Manually</button>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#facultyModal">Add Manually</button>
                         </div>
                         <div class="mb-5">
                             <div>Suited if you wish to add many teachers, you will have to add .csv file.</div>
-                            <button class="btn btn-primary">Add Bulk</button>
+
+                            <input type="file" id="bulk-data" accept=".csv" style="display: none;" onchange="addBulkFaculty()">
+                            <label for="bulk-data" class="btn btn-primary">Add bulk</label>
+
                             <a href="/sample_faculty"><button class="btn btn-outline-primary">Download Sample</button></a>
                         </div>
+                        <a href="#">Watch video tutorial</a>
                         </div>
                     </div>
                 </div>
         </div>
 
         <!-- Edit faculty modal -->
-        <div class="modal fade" id="faculty-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="editFacultyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -76,6 +80,35 @@
                     </div>
                     <div class="modal-footer">
                         <button id="save-changes-btn" class="btn btn-primary" onclick="saveChanges()">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="facultyModal" tabindex="-1" aria-labelledby="facultyModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Add Faculty</h5>
+                        <button id="close-addFaculty-modal" type="button" class="btn-close"
+                            data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Username -</strong> faculty1<br><strong>Email Assigned -</strong> faculty1@<span id="uid"></span></p>
+                        <div class="mb-3">
+                            <label for="faculty" class="col-form-label">Faculty Details</label>
+                            <div id="faculty-container" class="mb-3 m-1 border">
+                                <div class="p-2">
+                                    <input type="text" class="form-control" placeholder="Name">
+                                    <input type="text" class="form-control" placeholder="Username">
+                                </div>
+                            </div>
+                            <button class="btn btn-outline-primary" type="button" onclick="clearFaculty()">Reset</button>
+                            <button class="btn btn-primary" type="button" onclick="addMoreFaculty()">Add faculty</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="add-faculty-btn" type="button" class="btn btn-primary"  onclick="addManually()">Confirm</button>
                     </div>
                 </div>
             </div>
