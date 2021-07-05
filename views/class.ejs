@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/bootstrap") -%>
+    <link rel="stylesheet" href="/css/class.css">
+    <title>Class Overview</title>
+</head>
+<body>
+    <%- include("partials/navbar") -%>
+    <main>
+        <header>
+            <h3 id="class-tag">test-class-1</h3>
+            <button class="btn btn-primary">Add subjects</button>
+        </header>
+        
+        <div class="rowOuter">
+            <div class="rowInner">
+                <section class="big" id="subjects">
+                    <h5 class="section-header">Subjects(<span id="subjectsCount">5</span>)</h5><br>
+                    <div class="subject-container">
+                        <div id="subjectTag">subject-1</div>
+                        <div id="subjectCode">sub-1</div>
+                        <div id="coordinator">Faculty 1</div>
+                    </div>
+                    <div class="subject-container">
+                        <div id="subjectTag">subject-1</div>
+                        <div id="subjectCode">sub-1</div>
+                        <div id="coordinator">Faculty 1</div>
+                    </div>
+                    <div class="subject-container">
+                        <div id="subjectTag">subject-1</div>
+                        <div id="subjectCode">sub-1</div>
+                        <div id="coordinator">Faculty 1</div>
+                    </div>
+                    <div class="subject-container">
+                        <div id="subjectTag">subject-1</div>
+                        <div id="subjectCode">sub-1</div>
+                        <div id="coordinator">Faculty 1</div>
+                    </div>
+                    <div class="subject-container">
+                        <div id="subjectTag">subject-1</div>
+                        <div id="subjectCode">sub-1</div>
+                        <div id="coordinator">Faculty 1</div>
+                    </div>
+                </section>
+                <section class="small" id="students">
+                    <h5 class="section-header">Students(<span id="studentsCount">5</span>)</h5><br>
+                    <div class="student-container">
+                        <div id="studentName">Aastha Goyal</div>
+                        <div id="studentEmail">aastha@iiitbhopal.ac.in</div>
+                    </div>
+                    <div class="student-container">
+                        <div id="studentName">Vaibhav Kumar Singh</div>
+                        <div id="studentEmail">vaibhav@iiitbhopal.ac.in</div>
+                    </div>
+                    <div class="student-container">
+                        <div id="studentName">Navneet Namdev</div>
+                        <div id="studentEmail">navneet@iiitbhopal.ac.in</div>
+                    </div>
+                    <div class="student-container">
+                        <div id="studentName">Anant Raj</div>
+                        <div id="studentEmail">anant@iiitbhopal.ac.in</div>
+                    </div>
+                    <div class="student-container">
+                        <div id="studentName">Kartik Pant</div>
+                        <div id="studentEmail">kartik@iiitbhopal.ac.in</div>
+                    </div>
+                </section>
+            </div>
+            <section class="small" id="updates">
+                <h5 class="section-header">Add students</h5>
+                <br>
+                <div class="mb-5">
+                    <div>Suited if you wish to add only 2-3 students. You will have to add uid and name manually.</div>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#facultyModal">Add Manually</button>
+                </div>
+                <div class="mb-5">
+                    <div>Suited if you wish to add many students, you will have to add .csv file.</div>
+
+                    <input type="file" id="bulk-data" accept=".csv" style="display: none;" onchange="addBulkFaculty()">
+                    <label style="margin-top: 8px;" for="bulk-data" class="btn btn-primary">Add bulk</label>
+
+                    <a href="/sample_faculty"><button class="btn btn-outline-primary">Download Sample</button></a>
+                </div>
+                <a href="#">Watch video tutorial</a>
+                </div>
+            </section>
+        </div>
+        <br><br>
+        <header>
+            <h3>Documents</h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#docModal" type="button">
+                Add new Document
+            </button>
+        </header>
+        <div class="documents">
+            <p>Documents added here are visible to all the students of this class only. Should be used for adding timetable etc.</p>
+            <%- include("partials/empty", { id: "empty-doc" }) -%>
+            <div class="grid" id="docs">
+                <div class="grid-container">
+                    <img src="/images/doc-template.png" alt="" id="doc-img">
+                    <div id="doc-head">Timetable</div>
+                </div>
+                <div class="grid-container">
+                    <img src="/images/doc-template.png" alt="" id="doc-img">
+                    <div id="doc-head">Timetable</div>
+                </div>
+                <div class="grid-container">
+                    <img src="/images/doc-template.png" alt="" id="doc-img">
+                    <div id="doc-head">Timetable</div>
+                </div>
+                <div class="grid-container">
+                    <img src="/images/doc-template.png" alt="" id="doc-img">
+                    <div id="doc-head">Timetable</div>
+                </div>
+                <div class="grid-container">
+                    <img src="/images/doc-template.png" alt="" id="doc-img">
+                    <div id="doc-head">Timetable</div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <!-- Document modal -->
+    <div class="modal fade" id="docModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="docModalLabel">Add New Document</h5>
+                    <button id="close-doc-modal" type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label for="doc-tag" class="col-form-label">Document Tag:</label>
+                            <input type="text" class="form-control" id="new-doc-tag">
+                            <label for="doc-desc" class="col-form-label">Description(Optional):</label>
+                            <textarea class="form-control" id="new-doc-desc"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <input type="file" name="doc-file" id="doc-file" accept="image/*,.pdf">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="add-doc-btn" type="button" class="btn btn-primary"
+                        onclick="addNewDoc()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include("partials/footer") -%>
+</body>
+</html>

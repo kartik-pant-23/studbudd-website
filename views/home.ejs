@@ -6,7 +6,16 @@
 	<%- include("partials/bootstrap") -%>
 	<link rel="stylesheet" href="/css/home.css">
 </head>
-
+<script>
+	window.onload = function() {
+		const token = window.localStorage.getItem("token");
+		const domain = window.localStorage.getItem("org-domain");
+		if(token && domain) {
+			console.log("triggered!");
+			window.location.href = window.location.origin+`/org/${domain}`;
+		}
+	}
+</script>
 <body>
 	<section id="title">
 		<div class="container-fluid">
@@ -304,5 +313,4 @@
 
 	<%- include("partials/footer") -%>
 </body>
-
 </html>

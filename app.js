@@ -44,6 +44,7 @@ app.get("/register/:choice", (req,res) =>
 app.get("/org/:domain", (req, res) => 
     res.render("orghome", {data: req.params['domain']}));
 app.get("/batch/:_id", (req, res) => res.status(200).render("batch"));
+app.get("/class/:_id", (req, res) => res.status(200).render("class"));
 app.get('/add_faculty', (req, res) => res.render("addFaculty"));
 app.get("/error", (req, res) => res.render("error"));
 

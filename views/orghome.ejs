@@ -8,7 +8,7 @@
 </head>
 
 <body>
-	<%- include('partials/navbar', { domain: data }) -%>
+	<%- include('partials/navbar') -%>
 		<main>
 			<h1 id="org-name"></h1>
 			<section>
@@ -74,9 +74,8 @@
 						</div>
 					</div>
 					<button data-bs-toggle="modal" data-bs-target="#docModal" type="button">
-						<div id="button-text">
-							Add new Document <strong>+</strong>
-						</div>
+						<div id="button-text">Add new Document</div>
+						<strong>+</strong>
 					</button>
 
 					<!-- Document modal -->
