@@ -46,6 +46,10 @@ app.get("/org/:domain", (req, res) =>
 app.get("/batch/:_id", (req, res) => res.status(200).render("batch"));
 app.get("/class/:_id", (req, res) => res.status(200).render("class"));
 app.get('/add_faculty', (req, res) => res.render("addFaculty"));
+app.get('/sample_faculty', (req, res) => 
+    res.download(__dirname+"/assets/teachers_data.csv"));
+app.get('/sample_student', (req, res) => 
+    res.download(__dirname+"/assets/students_data.csv"));
 app.get("/error", (req, res) => res.render("error"));
 
 //Backend code

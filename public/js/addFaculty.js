@@ -22,7 +22,6 @@ class Faculty {
 
 // Adding new faculty in bulk
 function addBulkFaculty() {
-    console.log("triggered!");
     const file = $("bulk-data").files[0];
     $("bulk-data").value = null;
 
@@ -50,11 +49,10 @@ function addBulkFaculty() {
                     }
     
                     if(data.queuedItemsCount != data.addedItemsCount) {
-                        alert(`Added Faculty: ${data.addedItemsCount}/${data.queuedItemsCount}\nThis happens when when a faculty with same email already exists!`);
+                        alert(`Added Faculty: ${data.addedItemsCount}/${data.queuedItemsCount}\nThis happens when a faculty with same email already exists!`);
                     }
 
                     clearFaculty();
-                    $("close-addFaculty-modal").click();
                 } else {
                     alert(`Error message: ${data.message}`);
                 }

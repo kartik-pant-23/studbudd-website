@@ -38,7 +38,6 @@ exports.register = (req, res) => {
                 Student.insertMany(studentsData, { ordered: false }, (err, addedStudents) => {
 
                     if (err) addedStudents = err.insertedDocs;
-                    console.log(addedStudents);
                     Organization.findOneAndUpdate(
                         { domain: req.user.domain },
                         { $inc: { studentsCount: addedStudents.length } }

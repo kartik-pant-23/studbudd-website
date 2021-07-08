@@ -29,15 +29,15 @@
                 <br>
                 <div class="mb-5">
                     <div>Suited if you wish to add only 2-3 students. You will have to add uid and name manually.</div>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#facultyModal">Add Manually</button>
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#studentModal">Add Manually</button>
                 </div>
                 <div class="mb-5">
                     <div>Suited if you wish to add many students, you will have to add .csv file.</div>
 
-                    <input type="file" id="bulk-data" accept=".csv" style="display: none;" onchange="addBulkFaculty()">
+                    <input type="file" id="bulk-data" accept=".csv" style="display: none;" onchange="addStudentsBulk()">
                     <label style="margin-top: 8px;" for="bulk-data" class="btn btn-primary">Add bulk</label>
 
-                    <a href="/sample_faculty"><button class="btn btn-outline-primary">Download Sample</button></a>
+                    <a href="/sample_student"><button class="btn btn-outline-primary">Download Sample</button></a>
                 </div>
                 <a href="#">Watch video tutorial</a>
                 </div>
@@ -101,12 +101,41 @@
                                 <input type="text" class="form-control" placeholder="Subject Code(Optional)">
                             </div>
                         </div>
-                        <button class="btn btn-outline-primary" type="button" onclick="clearSubjects()">Reset</button>
-                        <button class="btn btn-primary" type="button" onclick="addMoreSubjects()">Add subject</button>
+                        <button class="btn btn-outline-primary" type="button" onclick="reset('new-subject-container')">Reset</button>
+                        <button class="btn btn-primary" type="button" onclick="addMore('new-subject-container')">Add subject</button>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" id="add-subject-btn" class="btn btn-primary" onclick="addSubjects()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add students manually -->
+    <div class="modal fade" id="studentModal" tabindex="-1" aria-labelledby="facultyModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Students</h5>
+                    <button id="close-student-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>See how this works.. For the given username, assigned email is given as an example!<br><strong>Username -</strong> student1<br><strong>Email Assigned -</strong> student1@<span id="uid"></span></p>
+                    <div class="mb-3">
+                        <label for="student" class="col-form-label">Student Details</label>
+                        <div id="new-student-container" class="mb-3 m-1 border">
+                            <div class="p-2">
+                                <input type="text" class="form-control" placeholder="Name">
+                                <input type="text" class="form-control" placeholder="Username">
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary" type="button" onclick="reset('new-student-container')">Reset</button>
+                        <button class="btn btn-primary" type="button" onclick="addMore('new-student-container', true)">Add student</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="add-student-btn" type="button" class="btn btn-primary"  onclick="addStudentsManually()">Confirm</button>
                 </div>
             </div>
         </div>

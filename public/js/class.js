@@ -4,8 +4,8 @@ const token = window.localStorage.getItem("token");
 const baseUrl = window.location.origin;
 const classId = window.location.pathname.split('/').reverse()[0];
 
-function clearSubjects() {
-    var container = $("new-subject-container");
+function reset(id) {
+    var container = $(id);
     var node = container.lastElementChild;
     Array.from(node.children).forEach(child => {
         child.disabled = false;
@@ -16,10 +16,20 @@ function clearSubjects() {
     })
     container.appendChild(node);
 }
-function addMoreSubjects() {
-    var container = $("new-subject-container");
+function addMore(id, req=false) {
+    var container = $(id);
     var lastNode = container.lastElementChild;
-    if(!lastNode.firstElementChild.value || lastNode.firstElementChild.value.trim()=="") {
+
+    showAlert = false;
+    if(req) {
+        Array.from(lastNode.children).forEach(child => {
+            if(!child.value || child.value.trim()=="") showAlert = true;
+        });
+    } else {
+        showAlert = !lastNode.firstElementChild.value || lastNode.firstElementChild.value.trim()=="";
+    }
+
+    if(showAlert) {
         alert("Mandatory values not fillled!")
     } else {
         var newNode = lastNode.cloneNode(true);
@@ -34,6 +44,118 @@ function addMoreSubjects() {
         container.appendChild(newNode);
     }
 }
+
+function addStudentsManually() {
+    var data = { "role": "student", "classId": classId, "users": [] };
+    Array.from($("new-student-container").children).forEach(student => {
+        if(student.children.item(0).disabled) {
+            var newStudent = {"name": student.children.item(0).value, "uid": student.children.item(1).value};
+            data.users.push(newStudent);
+        }
+    })
+    
+    if (data.users.length > 0) {
+        const btn = $("add-student-btn");
+        btn.innerText = "Adding...";
+        btn.disabled = true;
+        fetch(`${baseUrl}/api/student/register`, {
+            method: "POST",
+            body: JSON.stringify(data),
+            headers: {
+                "token": token,
+                "Content-type": "application/json"
+            }
+        }).then(res => {
+            res.json().then(data => {
+                if(res.status == 200) {
+                    if(data.addedStudents.length > 0) {
+                        $("empty-students").style.display = "none";
+                        $("students").className = "small card scroll";
+
+                        var container = $("students");
+                        data.addedStudents.forEach(item => {
+                            // studentArray.push(new student(item));
+                            container.appendChild(studentContainer(item));
+                        });
+                    }
+    
+                    if(data.queuedItemsCount != data.addedItemsCount) {
+                        alert(`Added student: ${data.addedItemsCount}/${data.queuedItemsCount}\nThis happens when when a student with same email already exists!`);
+                    }
+
+                    reset('new-student-container');
+                    $("close-student-modal").click();
+                } else {
+                    alert(`Error message - ${data.message}`);
+                }
+                btn.innerText = "Confirm";
+                btn.disabled = false;
+            }).catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+                btn.innerText = "Confirm";
+                btn.disabled = false;
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong!");
+            btn.innerText = "Confirm";
+            btn.disabled = false;
+        })
+    }
+}
+function addStudentsBulk() {
+    const file = $("bulk-data").files[0];
+    $("bulk-data").value = null;
+
+    if(file) {
+        const data = new FormData();
+        data.append("role", "student");
+        data.append("classId", classId);
+        data.append("contentFile", file);
+
+        fetch(`${baseUrl}/api/student/register`, {
+            method: "POST",
+            headers: { "token": token },
+            body: data
+        }).then(res => {
+            res.json().then(data => {
+                if(res.status == 200) {
+                    if(data.addedStudents.length > 0) {
+                        $("empty-students").style.display = "none";
+                        $("students").className = "small card scroll";
+
+                        var container = $("students");
+                        data.addedStudents.forEach(item => {
+                            // StudentsArray.push(new Students(item));
+                            container.appendChild(studentContainer(item));
+                        });
+
+                        $("studentsCount").innerText = parseInt($("studentsCount").innerText)+data.addedItemsCount;
+                    }
+    
+                    if(data.queuedItemsCount != data.addedItemsCount) {
+                        alert(`Added Students: ${data.addedItemsCount}/${data.queuedItemsCount}\nThis happens when a student with same email already exists!`);
+                    }
+
+                    reset('new-student-container');
+                } else {
+                    alert(`Error message: ${data.message}`);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong!")
+        })
+    }
+}
+
 function addSubjects() {
     var data = {"subjects": []};
     Array.from($("new-subject-container").children).forEach(detail => {
@@ -118,6 +240,7 @@ function updateUI(data) {
     const elements = document.getElementsByClassName("class-tag");
     for(i=0; i<elements.length; i++) elements[i].innerText = `${classTag}`
     document.title = `${classTag} | Studbudd`;
+    $("uid").innerText = window.localStorage.getItem("org-domain");
 
     const subjects = data.subjects;
     const subjectsCount = subjects.length;
