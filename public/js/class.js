@@ -1,0 +1,181 @@
+function $(id) { return document.getElementById(id) }
+
+const token = window.localStorage.getItem("token");
+const baseUrl = window.location.origin;
+const classId = window.location.pathname.split('/').reverse()[0];
+
+function clearSubjects() {
+    var container = $("new-subject-container");
+    var node = container.lastElementChild;
+    Array.from(node.children).forEach(child => {
+        child.disabled = false;
+        child.value = null;
+    })
+    Array.from(container.children).forEach(child => {
+        container.removeChild(child);
+    })
+    container.appendChild(node);
+}
+function addMoreSubjects() {
+    var container = $("new-subject-container");
+    var lastNode = container.lastElementChild;
+    if(!lastNode.firstElementChild.value || lastNode.firstElementChild.value.trim()=="") {
+        alert("Mandatory values not fillled!")
+    } else {
+        var newNode = lastNode.cloneNode(true);
+        
+        Array.from(lastNode.children).forEach(child => {
+            child.disabled = true;
+        })
+        
+        Array.from(newNode.children).forEach(child => {
+            child.value = null;
+        })
+        container.appendChild(newNode);
+    }
+}
+function addSubjects() {
+    var data = {"subjects": []};
+    Array.from($("new-subject-container").children).forEach(detail => {
+        if(detail.children.item(0).disabled) {
+            var subject = {};
+            const name = detail.children.item(0).value;
+            subject.name = name;
+            const code = detail.children.item(1).value;
+            if(code && code.trim()!="") subject.subjectCode = code;
+            data.subjects.push(subject);
+        }
+    })
+    
+    if(data.subjects.length > 0) {
+        const btn = $("add-subject-btn");
+        btn.innerText = "Adding...";
+        btn.disabled = true;
+        fetch(`${baseUrl}/api/class/${classId}`, {
+            method: "PATCH",
+            body: JSON.stringify(data),
+            headers: { "token": token, "Content-type": "application/json" }
+        }).then(res => {
+            res.json().then(resData => {
+                if(res.status == 200) {
+                    var newSubjects = resData.updatedClass.subjects.reverse().splice(0, data.subjects.length);
+                    $("empty-subjects").style.display = "none";
+                    $("subjects").className = "big card scroll"
+                    newSubjects.forEach(subject => {
+                        $("subjects").appendChild(subjectContainer(subject));
+                    });
+
+                    $("close-subject-modal").click();
+                } else {
+                    alert(`Error message: ${resData.message}`);
+                }
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+            })
+            btn.innerText = "Confirm";
+            btn.disabled = false;
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong!")
+            btn.innerText = "Confirm";
+            btn.disabled = false;
+        })
+    } else {
+        alert("No subjects added!")
+    }
+}
+
+function subjectContainer(subject) {
+    const {name} = subject.coordinator || {};
+    
+    const container = document.createElement('a');
+    container.href = `/subject/${subject._id}`;
+    container.setAttribute("id", subject._id);
+    container.innerHTML = `<div class="subject-container"><div><span class="subjectTag">${subject.name} </span><span class="subjectCode">(${subject.subjectCode})</span></div><div class="coordinator">${name || '-Not Assigned'}</div></div>`;
+
+    return container;
+}
+function studentContainer(student) {
+    const { name, email } = student;
+
+    const container = document.createElement('div');
+    container.className = 'student-container';
+    container.innerHTML = `<span class="studentName">${name}</span><br><span class="studentEmail">${email}</span>`;
+
+    return container;
+}
+function docContainer(doc) {
+    var container = document.createElement('a');
+    container.href = `/document/${doc._id}`;
+    container.innerHTML = `<div class="grid-container"><img src="/images/doc-template.png" alt="" id="doc-img"><div id="doc-head">${doc.tag}</div></div>`;
+    return container;
+}
+function updateUI(data) {
+    const classTag = data.tag;
+    const elements = document.getElementsByClassName("class-tag");
+    for(i=0; i<elements.length; i++) elements[i].innerText = `${classTag}`
+    document.title = `${classTag} | Studbudd`;
+
+    const subjects = data.subjects;
+    const subjectsCount = subjects.length;
+    $("subjectsCount").innerText = subjectsCount;
+    if(subjectsCount==0) {
+        $("empty-subjects").style.display = "block";
+        $("subjects").className = "big card no-scroll"
+    } else {
+        subjects.forEach(subject => {
+            $("subjects").appendChild(subjectContainer(subject));
+        });
+    }
+
+    const students = data.students;
+    const studentsCount = students.length;
+    $("studentsCount").innerText = studentsCount;
+    if(studentsCount==0) {
+        $("empty-students").style.display = "block";
+        $("students").className = "small card no-scroll"
+    } else {
+        students.forEach(student => {
+            $("students").appendChild(studentContainer(student));
+        })
+    }
+
+    const docs = data.documents;
+    if(docs.length == 0) {
+        $("empty-docs").style.display = "block";
+        $("documents").className = "card no-scroll padded"
+    } else {
+        docs.forEach(doc => {
+            $("docs").appendChild(docContainer(doc));
+        });
+    }
+}
+
+function loadData() {
+    fetch(`${baseUrl}/api/class/${classId}`,{
+            method: "GET",
+            headers: { "token": token }
+        }).then(res => {
+            res.json().then(data => {
+                if(res.status == 200) {
+                    updateUI(data);
+                } else {
+                    alert(`Error message: ${data.message}`);
+                }
+            }).catch(err => {
+                console.log(err);
+                alert("Somthing went wrong!");
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong!")
+        })
+}
+
+window.onload = function() {
+    loadData();
+}

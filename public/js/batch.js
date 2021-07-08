@@ -53,7 +53,7 @@ function classContainer(data) {
 
     var classDetails = document.createElement("div");
     classDetails.classList.add("class-details");
-    classDetails.innerHTML = `<div class="sub-head">Students Count: <strong>${data.studentsCount}</strong></div><div class="sub-head">Subjects Count: <strong>${data.subjects.length}</strong></div>`;
+    classDetails.innerHTML = `<div class="sub-head">Subjects Count: <strong>${data.subjects.length}</strong></div>`;
 
     var subjectDetails = document.createElement('ul');
     data.subjects.forEach(subject => {

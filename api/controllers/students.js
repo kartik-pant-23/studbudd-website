@@ -44,13 +44,11 @@ exports.register = (req, res) => {
                         { $inc: { studentsCount: addedStudents.length } }
                     ).exec()
                         .then(_ => {
-                            Class.findByIdAndUpdate(req.body.classId, { $inc: { studentsCount: addedStudents.length } }).exec()
-                                .then(__ => res.status(200).json({
-                                    queuedItemsCount: usersData.length,
-                                    addedItemsCount: addedStudents.length,
-                                    addedStudents: addedStudents
-                                }))
-                                .catch(err => error_handler(res, err));
+                            res.status(200).json({
+                                queuedItemsCount: usersData.length,
+                                addedItemsCount: addedStudents.length,
+                                addedStudents: addedStudents
+                            });
                         })
                         .catch(err => error_handler(res, err));
                 });

@@ -23,14 +23,13 @@ header>h3 {
 
 .rowOuter { display: flex; padding: 0px 24px; }
 .rowInner { display: flex; width: 70%; }
-section { 
-    height: 80vh; 
+.card { 
     background-color: #0d6efd1a; 
     padding: 16px 24px;
     margin: 0px 8px;
     margin-top: 12px;
+    border: none;
     border-radius: 4px;
-    overflow-y: scroll;
 }
 .big {
     width: 60%;
@@ -41,21 +40,26 @@ section {
 .rowOuter>.small {
     width: 30%;
 }
-#updates {
+#addStudents {
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
-section::-webkit-scrollbar-track {
+.scroll {
+    height: 80vh;
+    overflow-y: scroll;
+}
+.scroll::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
     background-color: #FeFeFe;
     border-radius: 10px; 
 }    
-section::-webkit-scrollbar {
+.scroll::-webkit-scrollbar {
     width: 2px;
     background-color: rgba(52, 152, 219, 0.25); 
 }
-section::-webkit-scrollbar-thumb { background-color: #dddddd; }
+.scroll::-webkit-scrollbar-thumb { background-color: #dddddd; }
+.no-scroll { height: auto; }
 
 .subject-container {
     background-color: #ffffff;
@@ -70,25 +74,22 @@ section::-webkit-scrollbar-thumb { background-color: #dddddd; }
 .subject-container:hover {
     box-shadow: 0px 0px 18px rgba(0, 0, 0, 0.20);
 }
-#subjectTag { color: #0d6efd; font-weight: 700; }
-#subjectCode { color: rgba(0, 0, 0, 0.5); font-size: 0.9em; }
-#coordinator { font-size: 0.9em; }
+.subjectTag { color: #0d6efd; font-weight: 700; }
+.subjectCode { color: rgba(0, 0, 0, 0.5); font-size: 0.9em; }
+.coordinator { font-size: 0.9em; text-align: right; }
 
 .student-container {
     padding: 4px 8px;
     border-bottom: 1px solid #0000001a;
     word-break: break-word;
 }
-.student-container>#studentName {
+.student-container>.studentName {
     font-weight: bold;
 }
 
-.documents {
-    background-color: #0d6efd1a; 
-    padding: 16px 24px;
-    margin: 0px 24px;
-    margin-top: 12px;
-    border-radius: 4px;
+.padded {
+    margin-left: 24px;
+    margin-right: 24px;
 }
 .grid {
     display: grid;
@@ -110,7 +111,7 @@ section::-webkit-scrollbar-thumb { background-color: #dddddd; }
 .grid-container:hover {
     box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.20);
 }
-.grid>a { text-decoration: none; }
+.grid>a, #subjects>a { text-decoration: none; }
 #doc-img {
     width: 100%;
     height: 75%;
@@ -128,6 +129,16 @@ section::-webkit-scrollbar-thumb { background-color: #dddddd; }
     text-overflow: ellipsis;
 }
 
+.settings-option {
+    display: flex;
+    align-items: center;
+    padding: 0 48px;
+}
+.settings-option>button {
+    white-space: nowrap;
+    margin-left: auto;
+}
+
 .footer {
     padding: 1rem;
     background-color: #0d6efd1a;
@@ -143,26 +154,29 @@ section::-webkit-scrollbar-thumb { background-color: #dddddd; }
         margin-top: 48px;
     }
     .rowOuter { padding: 0; }
-    .documents { margin: 12px; }
+    .padded { margin: 12px; }
     .grid { margin: 0px 12px; }
 }
 @media (max-width: 800px) {
-    section { margin: 0; margin-top: 12px; height: 60vh; }
+    .scroll { height: 60vh; }
+    .card { margin: 0; margin-top: 12px; }
     .rowOuter { display: block; align-items: center; }
     .rowInner { width: 100%; }
     .rowInner>section { margin-right: 6px; margin-left: 6px; }
     .rowOuter>.small { width: 100%; }
     .grid { grid-template-columns: 50% 50%; }
+    .settings-option { padding: 0 24px; }
 }
 @media (max-width: 600px) {
     .rowInner>.big, .rowInner>.small { width: 50%; }
-    section, .documents { padding: 8px 12px; }
+    .card { padding: 8px 12px; }
     .grid { margin: 0; }
     #doc-head { margin: 12px; }
+    .settings-option { padding: 0 12px; }
 }
 @media (max-width: 450px) {
     main { padding: 12px; margin-top: 60px; }
-    section, .documents { margin: 0; margin-top: 12px; }
+    .card { margin: 0; margin-top: 12px; }
     .rowInner { display: block; }
     .rowInner>.big, .rowInner>.small { width: 100%; margin: 0; margin-top: 12px; }
     .grid { 
@@ -170,4 +184,5 @@ section::-webkit-scrollbar-thumb { background-color: #dddddd; }
         margin: 0;
     }
     .grid-container { margin: 8px 0; }
+    .settings-option { padding: 0; }
 }

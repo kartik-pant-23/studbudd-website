@@ -28,23 +28,21 @@
                                         data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form>
-                                        <div class="mb-3">
-                                            <label for="batch-tag" class="col-form-label">Class Tag:</label>
-                                            <input type="text" class="form-control" id="new-class-tag">
-                                        </div>
-                                        <div class="mb-3">
-                                            <label for="subjects" class="col-form-label">Subjects (Optional):</label>
-                                            <div id="subject-container" class="mb-3 m-1 border">
-                                                <div class="p-2">
-                                                    <input type="text" class="form-control" placeholder="Subject Name">
-                                                    <input type="text" class="form-control" placeholder="Subject Code(Optional)">
-                                                </div>
+                                    <div class="mb-3">
+                                        <label for="batch-tag" class="col-form-label">Class Tag:</label>
+                                        <input type="text" class="form-control" id="new-class-tag">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="subjects" class="col-form-label">Subjects (Optional):</label>
+                                        <div id="subject-container" class="mb-3 m-1 border">
+                                            <div class="p-2">
+                                                <input type="text" class="form-control" placeholder="Subject Name">
+                                                <input type="text" class="form-control" placeholder="Subject Code(Optional)">
                                             </div>
-                                            <button class="btn" style="background-color: white; color: #3498db;" type="button" onclick="clearSubjects()">Reset</button>
-                                            <button class="btn" style="background-color: #3498db; color: white;" type="button" onclick="addMoreSubjects()">Add subject</button>
                                         </div>
-                                    </form>
+                                        <button class="btn btn-outline-primary" type="button" onclick="clearSubjects()">Reset</button>
+                                        <button class="btn btn-primary" type="button" onclick="addMoreSubjects()">Add subject</button>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button id="add-class-btn" type="button" class="btn btn-primary" onclick="addNewClass()">Confirm</button>
@@ -74,17 +72,15 @@
 										aria-label="Close"></button>
 								</div>
 								<div class="modal-body">
-									<form>
-										<div class="mb-3">
-											<label for="doc-tag" class="col-form-label">Document Tag:</label>
-											<input type="text" class="form-control" id="new-doc-tag">
-											<label for="doc-desc" class="col-form-label">Description(Optional):</label>
-											<textarea class="form-control" id="new-doc-desc"></textarea>
-										</div>
-										<div class="mb-3">
-											<input type="file" name="doc-file" id="doc-file" accept="image/*,.pdf">
-										</div>
-									</form>
+                                    <div class="mb-3">
+                                        <label for="doc-tag" class="col-form-label">Document Tag:</label>
+                                        <input type="text" class="form-control" id="new-doc-tag">
+                                        <label for="doc-desc" class="col-form-label">Description(Optional):</label>
+                                        <textarea class="form-control" id="new-doc-desc"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input type="file" name="doc-file" id="doc-file" accept="image/*,.pdf">
+                                    </div>
 								</div>
 								<div class="modal-footer">
 									<button id="add-doc-btn" type="button" class="btn btn-primary" onclick="addNewDoc()">Confirm</button>

@@ -9,65 +9,22 @@
     <%- include("partials/navbar") -%>
     <main>
         <header>
-            <h3 id="class-tag">test-class-1</h3>
-            <button class="btn btn-primary">Add subjects</button>
+            <h3 class="class-tag"></h3>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#subjectModal">Add subjects</button>
         </header>
         
         <div class="rowOuter">
             <div class="rowInner">
-                <section class="big" id="subjects">
-                    <h5 class="section-header">Subjects(<span id="subjectsCount">5</span>)</h5><br>
-                    <div class="subject-container">
-                        <div id="subjectTag">subject-1</div>
-                        <div id="subjectCode">sub-1</div>
-                        <div id="coordinator">Faculty 1</div>
-                    </div>
-                    <div class="subject-container">
-                        <div id="subjectTag">subject-1</div>
-                        <div id="subjectCode">sub-1</div>
-                        <div id="coordinator">Faculty 1</div>
-                    </div>
-                    <div class="subject-container">
-                        <div id="subjectTag">subject-1</div>
-                        <div id="subjectCode">sub-1</div>
-                        <div id="coordinator">Faculty 1</div>
-                    </div>
-                    <div class="subject-container">
-                        <div id="subjectTag">subject-1</div>
-                        <div id="subjectCode">sub-1</div>
-                        <div id="coordinator">Faculty 1</div>
-                    </div>
-                    <div class="subject-container">
-                        <div id="subjectTag">subject-1</div>
-                        <div id="subjectCode">sub-1</div>
-                        <div id="coordinator">Faculty 1</div>
-                    </div>
+                <section class="big card scroll" id="subjects">
+                    <h5 class="section-header">Subjects(<span id="subjectsCount"></span>)</h5><br>
+                    <%- include("partials/empty", {id: "empty-subjects"}) -%>
                 </section>
-                <section class="small" id="students">
-                    <h5 class="section-header">Students(<span id="studentsCount">5</span>)</h5><br>
-                    <div class="student-container">
-                        <div id="studentName">Aastha Goyal</div>
-                        <div id="studentEmail">aastha@iiitbhopal.ac.in</div>
-                    </div>
-                    <div class="student-container">
-                        <div id="studentName">Vaibhav Kumar Singh</div>
-                        <div id="studentEmail">vaibhav@iiitbhopal.ac.in</div>
-                    </div>
-                    <div class="student-container">
-                        <div id="studentName">Navneet Namdev</div>
-                        <div id="studentEmail">navneet@iiitbhopal.ac.in</div>
-                    </div>
-                    <div class="student-container">
-                        <div id="studentName">Anant Raj</div>
-                        <div id="studentEmail">anant@iiitbhopal.ac.in</div>
-                    </div>
-                    <div class="student-container">
-                        <div id="studentName">Kartik Pant</div>
-                        <div id="studentEmail">kartik@iiitbhopal.ac.in</div>
-                    </div>
+                <section class="small card scroll" id="students">
+                    <h5 class="section-header">Students(<span id="studentsCount"></span>)</h5><br>
+                    <%- include("partials/empty", {id: "empty-students"}) -%>
                 </section>
             </div>
-            <section class="small" id="updates">
+            <section class="small card no-scroll" id="addStudents">
                 <h5 class="section-header">Add students</h5>
                 <br>
                 <div class="mb-5">
@@ -86,40 +43,75 @@
                 </div>
             </section>
         </div>
+
         <br><br>
+
         <header>
             <h3>Documents</h3>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#docModal" type="button">
                 Add new Document
             </button>
         </header>
-        <div class="documents">
-            <p>Documents added here are visible to all the students of this class only. Should be used for adding timetable etc.</p>
-            <%- include("partials/empty", { id: "empty-doc" }) -%>
-            <div class="grid" id="docs">
-                <div class="grid-container">
-                    <img src="/images/doc-template.png" alt="" id="doc-img">
-                    <div id="doc-head">Timetable</div>
+        <div class="card scroll padded" id="documents">
+            <p>Documents added here are visible to all the students of this class only. Should be used for adding <strong>timetable</strong> etc.</p>
+            <%- include("partials/empty", { id: "empty-docs" }) -%>
+            <div class="grid" id="docs"></div>
+        </div>
+
+        <br><br>
+
+        <header>
+            <h3>Settings</h3>
+        </header>
+        <div class="card no-scroll padded">
+            Be careful while making changes here!
+            <br><br>
+            <div class="settings-option mb-3">
+                <div>
+                    <h5>Change name</h5>
+                    <p>Currently the name of the class is <strong class="class-tag"></strong>. Do you want to change it to something else?</p>
                 </div>
-                <div class="grid-container">
-                    <img src="/images/doc-template.png" alt="" id="doc-img">
-                    <div id="doc-head">Timetable</div>
+                <button class="btn btn-warning">Change</button>
+            </div>
+            <div class="settings-option mb-3">
+                <div>
+                    <h5>Delete Class</h5>
+                    <p>Deleting this class will remove all the students, along with removing the class. Do you want to delete?</p>
                 </div>
-                <div class="grid-container">
-                    <img src="/images/doc-template.png" alt="" id="doc-img">
-                    <div id="doc-head">Timetable</div>
-                </div>
-                <div class="grid-container">
-                    <img src="/images/doc-template.png" alt="" id="doc-img">
-                    <div id="doc-head">Timetable</div>
-                </div>
-                <div class="grid-container">
-                    <img src="/images/doc-template.png" alt="" id="doc-img">
-                    <div id="doc-head">Timetable</div>
-                </div>
+                <button class="btn btn-danger">Delete</button>
             </div>
         </div>
     </main>
+
+    <!-- Add subjects -->
+    <div class="modal fade" id="subjectModal" tabindex="-1" aria-labelledby="subjectModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add New Subjects</h5>
+                    <button id="close-subject-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-col-label">Subject Details</label>
+                        <div id="new-subject-container" class="mb-3 m-1 border">
+                            <div class="p-2">
+                                <input type="text" class="form-control" placeholder="Subject Name">
+                                <input type="text" class="form-control" placeholder="Subject Code(Optional)">
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-primary" type="button" onclick="clearSubjects()">Reset</button>
+                        <button class="btn btn-primary" type="button" onclick="addMoreSubjects()">Add subject</button>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="add-subject-btn" class="btn btn-primary" onclick="addSubjects()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Document modal -->
     <div class="modal fade" id="docModal" tabindex="-1" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
@@ -131,17 +123,15 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="doc-tag" class="col-form-label">Document Tag:</label>
-                            <input type="text" class="form-control" id="new-doc-tag">
-                            <label for="doc-desc" class="col-form-label">Description(Optional):</label>
-                            <textarea class="form-control" id="new-doc-desc"></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <input type="file" name="doc-file" id="doc-file" accept="image/*,.pdf">
-                        </div>
-                    </form>
+                    <div class="mb-3">
+                        <label for="doc-tag" class="col-form-label">Document Tag:</label>
+                        <input type="text" class="form-control" id="new-doc-tag">
+                        <label for="doc-desc" class="col-form-label">Description(Optional):</label>
+                        <textarea class="form-control" id="new-doc-desc"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <input type="file" name="doc-file" id="doc-file" accept="image/*,.pdf">
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button id="add-doc-btn" type="button" class="btn btn-primary"
@@ -151,5 +141,6 @@
         </div>
     </div>
     <%- include("partials/footer") -%>
+    <script src="/js/class.js"></script>
 </body>
 </html>

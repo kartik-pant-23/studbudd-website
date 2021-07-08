@@ -11,8 +11,7 @@ const classSchema = mongoose.Schema({
             type: mongoose.SchemaTypes.ObjectId, 
             ref: "Faculty" 
         },
-    }],
-    studentsCount: { type: Number, default: 0 }
+    }]
 }, {timestamps: true});
 
 classSchema.pre('save', function (next) {

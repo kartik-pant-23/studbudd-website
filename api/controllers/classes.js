@@ -1,7 +1,8 @@
 const Class = require('../models/class');
-
 const Organization = require('../models/organization');
 const Document = require('../models/document');
+const Student = require("../models/student");
+
 const error_handler = require('../../middleware/error_handler');
 
 exports.getClassesInBatch = (req,res) => {
@@ -48,17 +49,27 @@ exports.addClass = (req, res) => {
 // Get details of a class
 exports.getClassDetails = (req, res) => {
     Class.findById(req.params['_id'])
-    .populate("subjects.coordinator", "name email")
+    .select('tag subjects')
+    .populate("subjects.coordinator", "name")
     .exec()
     .then(classDetails => {
         if(classDetails) {
-            Document.find({ ref: classDetails._id }).exec()
-            .then(docs => {
-                res.status(200).json({
-                    class: classDetails,
-                    documents: docs
+            Student.find({ class: req.params['_id'] })
+            .select('name email')
+            .exec()
+            .then(students => {
+                Document.find({ ref: classDetails._id }).select('tag').exec()
+                .then(docs => {
+                    res.status(200).json({
+                        tag: classDetails.tag,
+                        subjects: classDetails.subjects,
+                        students: students,
+                        documents: docs
+                    })
                 })
+                .catch(err => error_handler(res, err));
             })
+            .catch(err => error_handler(res, err));
         } else {
             res.status(404).json({ message: "Class does not exist!" });
         }
@@ -75,23 +86,21 @@ exports.updateClass = (req, res) => {
     if (req.body.subjects) {
         update.$push.subjects = { $each: req.body.subjects };
     }
-    if (req.body.students) {
-        update.$push.students = { $each: req.body.students };
-    }
     Class.findOneAndUpdate(
-        {
-            org: req.user._id,
-            _id: req.params['_id']
-        },
+        {_id: req.params['_id'] },
         update,
         { new: true })
         .select('-batch')
         .exec()
         .then(updatedClass => {
-            res.status(200).json({
-                message: "Class updated!",
-                updatedClass: updatedClass
-            })
+            if(updatedClass) {
+                res.status(200).json({
+                    message: "Class updated!",
+                    updatedClass: updatedClass
+                })
+            } else {
+                res.status(404).json({ message: "Class does not exist!" });
+            }
         })
         .catch(err => error_handler(res, err));
 }

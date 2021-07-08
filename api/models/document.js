@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const Organization = require('../models/organization')
-const Class = require('../models/class')
 
 const DocumentSchema = mongoose.Schema({
     tag: {type: String, default: "Untitled", trim: true },
