@@ -71,14 +71,14 @@
                     <h5>Change name</h5>
                     <p>Currently the name of the class is <strong class="class-tag"></strong>. Do you want to change it to something else?</p>
                 </div>
-                <button class="btn btn-warning">Change</button>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#changeNameModal">Change</button>
             </div>
             <div class="settings-option mb-3">
                 <div>
                     <h5>Delete Class</h5>
                     <p>Deleting this class will remove all the students, along with removing the class. Do you want to delete?</p>
                 </div>
-                <button class="btn btn-danger">Delete</button>
+                <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteClassModal">Delete</button>
             </div>
         </div>
     </main>
@@ -165,6 +165,54 @@
                 <div class="modal-footer">
                     <button id="add-doc-btn" type="button" class="btn btn-primary"
                         onclick="addNewDoc()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change name -->
+    <div class="modal fade" id="changeNameModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Name</h5>
+                    <button id="close-changeName-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <p>Do you really wish to change the class name.. this might result into some non-severe issues!</p>
+                        <label for="doc-tag" class="col-form-label">New name:</label>
+                        <input type="text" class="form-control" id="new-name-tag">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="add-changeName-btn" type="button" class="btn btn-primary"
+                        onclick="changeName()">Confirm</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete class -->
+    <div class="modal fade" id="deleteClassModal" tabindex="-1" aria-labelledby="deleteModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Delete Class</h5>
+                    <button id="close-deleteClass-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <p>Deleting this class will also remove all the students that are added in this class!</p>
+                        <p>Type <strong>permanently delete</strong> if you wish to continue.</p>
+                        <input type="text" class="form-control" id="delete-tag" oninput="shouldDelete()" placeholder="permanently delete">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="delete-class-btn" type="button" class="btn btn-danger"
+                        onclick="deleteClass()" disabled>Delete</button>
                 </div>
             </div>
         </div>

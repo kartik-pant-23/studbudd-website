@@ -45,6 +45,117 @@ function addMore(id, req=false) {
     }
 }
 
+function shouldDelete() {
+    var text = $("delete-tag").value;
+    if(text && text.trim()=="permanently delete") {
+        $("delete-class-btn").disabled = false;
+    } else {
+        $("delete-class-btn").disabled = true;
+    }
+}
+function deleteClass() {
+    fetch(`${baseUrl}/api/class/${classId}`, {
+        method: "DELETE",
+        headers: { "token": token }
+    }).then(res => {
+        res.json().then(_ => {
+            if(res.status == 200) {
+                $("close-deleteClass-modal").click();
+                location.reload();
+            } else {
+                alert(`Error message: ${data.message}`);
+            }
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Something went wrong!");
+        })
+    })
+    .catch(err => {
+        console.log(err);
+        alert("Something went wrong!");
+    })
+}
+
+function changeName() {
+    const newClassName = $("new-name-tag").value;
+    if(!newClassName || newClassName.trim()=="") {
+        alert("Class name must be added!");
+    } else {
+        fetch(`${baseUrl}/api/class/${classId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                token: token
+            },
+            body: JSON.stringify({ newName: newClassName })
+        }).then(res => {
+            res.json().then(data => {
+                if(res.status == 200) {
+                    const classTag = data.updatedClass.tag;
+                    const elements = document.getElementsByClassName("class-tag");
+                    for(i=0; i<elements.length; i++) elements[i].innerText = `${classTag}`
+                    document.title = `${classTag} | Studbudd`;
+
+                    $("new-name-tag").value = null;
+                    $("close-changeName-modal").click();
+                } else {
+                    alert(`Error message: ${data.message}`);
+                }
+            }).catch(err => {
+                console.log(err);
+                alert("Something wnent wrong!");
+            })
+        }).catch(err => {
+            console.log(err);
+            alert("Somthing went wrong!");
+        })
+    }
+}
+
+function addNewDoc() {
+    const file = $("doc-file");
+    const tag = $("new-doc-tag");
+    const desc = $("new-doc-desc");
+    if(!file.files[0]) alert("File must be chosen!");
+    else if(!tag || tag.value.trim() == "") alert("Tag must be added!");
+    else {
+        $("add-doc-btn").innerText = "Adding...";
+        $("add-doc-btn").disabled = true;
+        const data = new FormData();
+        data.append('file',file.files[0]);
+        data.append('tag',tag.value);
+        data.append('description',desc.value);
+        data.append('ref', classId);
+        
+        fetch(`${baseUrl}/api/document/upload`, {
+            method: "POST",
+            body: data,
+            headers: {
+                'token': token
+            }
+        }).then(response => {
+            $("add-doc-btn").innerText = "Confirm";
+            $("add-doc-btn").disabled = false;
+            response.json().then(data => {
+                $("documents").className = "card scroll padded"
+                $("empty-doc").style.display = "none";
+                $("docs").appendChild(docContainer(data.document));
+                tag.value = null;
+                desc.value = null;
+                file.value = null;
+                $("close-doc-modal").click();
+            }).catch(_ => {
+                console.log(_);
+                alert("Something went wrong!")
+            });
+        }).catch(_ => {
+            console.log(_)
+            alert("Something went wrong!")
+        });
+    }
+}
+
 function addStudentsManually() {
     var data = { "role": "student", "classId": classId, "users": [] };
     Array.from($("new-student-container").children).forEach(student => {

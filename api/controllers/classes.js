@@ -128,34 +128,28 @@ exports.patchSubject = (req, res) => {
 
 // Delete class 
 exports.deleteClass = (req, res) => {
-    Class.findById(req.params['_id']).exec()
-        .then(obj => {
-            if (obj) {
-                const { org, batch, _id } = obj;
-                obj.deleteOne({ _id: _id }, (err, _) => {
-                    if (err) {
-                        error_handler(res, err);
-                    } else {
-                        // Remove entry from Organization as well
-                        Organization.findOneAndUpdate(
-                            { _id: org, 'batches._id': batch },
-                            { $pull: { 'batches.$.classes': _id } },
-                            { new: true }
-                        ).exec()
-                            .then(updatedOrg => {
-                                res.status(200).json({
-                                    message: "Class deleted",
-                                    updatedOrg: updatedOrg
-                                })
-                            })
-                            .catch(err => error_handler(res, err));
-                    }
-                })
-            } else {
-                res.status(404).json({
-                    message: "Class does not exist"
-                })
-            }
-        })
-        .catch(err => error_handler(res, err));
+    Class.findByIdAndDelete(req.params['_id'])
+    .then(obj => {
+        if(obj) {
+            // Delete students
+            Student.deleteMany({ class: obj._id })
+            .then(delRes => {
+                // Update organization info
+                Organization.findOneAndUpdate(
+                    { 'batches._id': obj.batch },
+                    { $inc: {
+                        'batches.$.classCount': -1,
+                        'studentsCount': -1*delRes.deletedCount
+                    }},
+                    { new: true }
+                ).then(_ => res.status(200).json({ message: "Class deleted!" }))
+                .catch(err => error_handler(res, err));
+            })
+            .catch(err => error_handler(res, err));
+        }
+        else {
+            res.status(404).json({ message: "Class doesn't exist!" });
+        }
+    })
+    .catch(err => error_handler(res, err));
 }
