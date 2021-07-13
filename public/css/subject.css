@@ -1,0 +1,190 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Montserrat';
+}
+
+header,.container-header { display: flex; align-items: center; }
+header>button,.container-header>button { margin-left: auto; }
+
+main {
+    margin-top: 64px;
+    padding: 24px 40px;
+}
+
+header>h3 {
+    font-weight: 700;
+    border-left: 8px solid #0d6efd;
+    border-radius: 4px;
+    padding: 8px 12px;
+    text-overflow: ellipsis;
+}
+
+label { margin: 0; }
+
+.row {
+    display: flex;
+    margin: 0 16px;
+}
+
+.card {
+    background-color: #0d6efd1a; 
+    padding: 16px 24px;
+    margin: 0px 4px;
+    margin-top: 12px;
+    border: none;
+    border-radius: 4px;
+}
+.card-no-color {
+    background-color: #ffffff; 
+    padding: 16px 24px;
+    margin: 0px 4px;
+    margin-top: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.scroll {
+    height: 70vh;
+    overflow-y: scroll;
+    margin: 8px 2px;
+    font-size: small;
+    padding: 8px;
+}
+.scroll::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
+    background-color: #FeFeFe;
+    border-radius: 10px; 
+}    
+.scroll::-webkit-scrollbar {
+    width: 2px;
+    background-color: rgba(52, 152, 219, 0.25); 
+}
+.scroll::-webkit-scrollbar-thumb { background-color: #dddddd; }
+.no-scroll { height: auto; padding: 8px; }
+
+#notesContainer { 
+    width: 39%; 
+    padding: 16px;
+}
+#notesContainer>.container-header>label { margin-left: auto; }
+#notesContainer>.container-header>button { margin-left: 4px; }
+#notes { background-color: #fafafa; }
+.chat {
+    max-width: 80%;
+    padding: 4px 8px;
+    margin: 1px 4px;
+    border-radius: 4px;
+}
+.chat-self {
+    float: right;
+    background-color: #0d6efd1a;
+}
+.chat-other {
+    float: left;
+    background-color: #0d6dfd66;
+}
+.chat-top { margin-top: 8px; }
+.noteItem, .assignmentItem, .examItem {
+    background-color: #0d6efd;
+    border-radius: 4px;
+    color: white;
+    padding: 8px 16px;
+    margin: 8px 4px;
+    margin-top: 16px;
+    width: 80%;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.10);
+    transition: box-shadow 0.3s ease-in-out;
+    cursor: pointer;
+    float: right;
+}
+.noteItem:hover, .assignmentItem:hover {
+    box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.20);
+}
+.assignmentItem { background-color: #ffc107; }
+.details-right { text-align: right; }
+.examItem { background-color: #dc3545; }
+
+#inputContainer {
+    display: flex;
+    align-items: baseline;
+}
+#inputContainer>input[type="text"] { margin-right: 6px;}
+
+#assignmentsContainer {
+    padding: 8px;
+    width: 59%;
+}
+.assignments>input { margin-bottom: 12px; }
+.assignmentsBottom { text-align: right; }
+
+.fileInputDiv { 
+    margin: 16px 0;
+    display: flex;
+    align-items: center; 
+}
+.fileInputDiv>label { margin-left: auto; }
+
+.questionContainer { margin: 24px 0 }
+.quesText { display: flex; }
+.quesText>#quesType { 
+    margin-left: 4px;
+    width: fit-content; 
+}
+
+.quesOptions { margin-top: 8px; }
+.quesOption { 
+    margin: 0 8px;
+    margin-bottom: 4px; 
+    display: flex;
+    align-items: center;
+}
+.quesOption>input[type="text"] { 
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 4px; 
+}
+.quesOption>button {
+    border: none;
+    background-color: #0d6efd;
+    color: white;
+    margin-left: 6px;
+    padding: 4px 8px;
+    border-radius: 2px;
+}
+
+.footer {
+    padding: 1rem;
+    background-color: #0d6efd1a;
+    text-align: center;
+    font-size: 0.8em;
+    color: rgba(0, 0, 0, 0.5);
+}
+.footer p { margin: 0; }
+
+@media (max-width: 900px) {
+    main { 
+        padding: 24px; 
+        margin-top: 48px;
+    }
+    .row { margin: 0 4px; }
+    #notesContainer, #assignmentsContainer { width: 48%; }
+    .quesText { display: block; }
+    .quesText>#quesType { margin-left: auto; margin-top: 4px; }
+}
+@media (max-width: 600px) {
+    main {
+        padding: 24px 12px;
+    }
+    .scroll, .no-scroll { margin: 0; margin-top: 12px; }
+    #notes, .assignments { margin: 8px 0; }
+    #notesContainer, #assignmentsContainer { width: 100%; }
+}
+@media (max-width: 450px) {
+    main { 
+        padding: 12px; 
+        margin-top: 60px;
+    }
+    .row { margin: 0; }
+}

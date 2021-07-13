@@ -45,6 +45,7 @@ app.get("/org/:domain", (req, res) =>
     res.render("orghome", {data: req.params['domain']}));
 app.get("/batch/:_id", (req, res) => res.status(200).render("batch"));
 app.get("/class/:_id", (req, res) => res.status(200).render("class"));
+app.get("/subject/:_id", (req, res) => res.status(200).render("subject"));
 app.get('/add_faculty', (req, res) => res.render("addFaculty"));
 app.get('/sample_faculty', (req, res) => 
     res.download(__dirname+"/assets/teachers_data.csv"));

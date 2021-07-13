@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include("partials/bootstrap") -%>
+    <link rel="stylesheet" href="/css/subject.css">
+    <title>Subjects Overview</title>
+</head>
+<body>
+    <%- include("partials/navbar") -%>
+    <main>
+        <header><h3>Engineering Mathematics</h3></header>
+        <div class="row">
+            <div class="card-no-color no-scroll" id="notesContainer">
+                <div class="container-header">
+                    <h5>Interact</h5>
+                    <input style="display: none;" type="file" name="notes" id="notes" accept="image/*, .pdf">
+                    <label class="btn btn-outline-primary" for="assignment">Upload</label>
+                    <button class="btn btn-primary">Archive</button>
+                </div>
+                <div class="scroll" id="notes">
+                    <div class="chat chat-self">Hello students! I am scheduling an exam for you all. Be ready with chapter-2.</div>
+                    <div class="chat chat-other chat-top">
+                        <strong id="sender">Kartik Pant<br></strong>
+                        Thank you ma'am, but we don't want this!
+                    </div>
+                    <div class="chat chat-other">
+                        <strong id="sender"></strong>
+                        Yes ma'am.. take this notice back.
+                    </div>
+                    <div class="noteItem">
+                        <h6><strong>Chapter 1 - Data Structures and Algorithms</strong></h6>
+                        <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. At qui accusantium delectus molestias illum, assumenda facilis unde ex aliquam, mollitia quisquam. Recusandae, veniam earum. Suscipit omnis et quidem magni distinctio, culpa voluptatum explicabo ab cum maiores nam vitae. Eum et nostrum iusto praesentium qui sint eveniet modi fuga dolor repudiandae.</div>
+                    </div>
+                    <div class="chat chat-other chat-top">
+                        <strong id="sender">Kartik Pant<br></strong>
+                        Thank you ma'am, but we don't want this!
+                    </div>
+                    <div class="chat chat-other">
+                        <strong id="sender"></strong>
+                        Yes ma'am.. take this notice back.
+                    </div>
+                    <div class="assignmentItem">
+                        <h6><strong>Assignment 1</strong></h6>
+                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa accusamus consequatur ea ducimus sit porro rerum assumenda ullam omnis voluptates! Nesciunt tempora perferendis optio omnis.</div>
+                        <div class="details-right">
+                            <u>Deadline</u> - <strong>15/07/2021 17:00 UTC</strong>
+                        </div>
+                    </div>
+                    <div class="chat chat-other chat-top">
+                        <strong id="sender">Kartik Pant<br></strong>
+                        Thank you ma'am, but we don't want this!
+                    </div>
+                    <div class="chat chat-other">
+                        <strong id="sender"></strong>
+                        Yes ma'am.. take this notice back.
+                    </div>
+                    <div class="examItem">
+                        <h6><strong>Mid Term Examination </strong>(50-Marks) | 3 hours</h6>
+                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident beatae nemo maiores, deserunt earum amet?</div>
+                        <div class="details-right">
+                            <u>Date</u> - <strong>25/07/2021 10:00 UTC</strong>
+                        </div>
+                    </div>
+                </div>
+                <div id="inputContainer">
+                    <input class="form-control" type="text" name="chat" id="chat" placeholder="Type something...">
+                    <button class="btn btn-primary">Send</button>
+                </div>
+            </div>
+            <div class="card no-scroll" id="assignmentsContainer">
+                <div class="no-scroll" id="assignments">
+                    <div class="container-header">
+                        <h5>Assignments</h5>
+                        <button class="btn btn-primary">Archive</button>
+                    </div>
+                    <div class="scroll assignments">
+                        <label class="form-col-label" for="title">Title</label>
+                        <input class="form-control" type="text" name="title" id="title" placeholder="Assignment Title">
+                        <label class="form-col-label" for="submissionDate">Submission Date</label>
+                        <input class="form-control" type="datetime-local" name="submissionDate" id="submissionDate">
+                        <div class="fileInputDiv">
+                            <strong>You can upload a document from your device.</strong>
+                            <input style="display: none;" type="file" name="assignment" id="assignment" accept="image/*, .pdf">
+                            <label class="btn btn-outline-primary" for="assignment">Upload</label>
+                        </div>
+                        <div style="text-align: center;"><strong>OR</strong></div>
+                        <div class="questions" id="questions">
+                            <div class="questionContainer">
+                                <div class="quesText">
+                                    <input type="text" class="form-control" placeholder="Question 1">
+                                    <select class="form-select form-select-sm" name="quesType" id="quesType">
+                                        <option value="quesType">Subjective</option>
+                                        <option value="quesType">Objective</option>
+                                    </select>
+                                </div>
+                                <div class="quesOptions">
+                                    <div class="quesOption">
+                                        <input type="text" placeholder="Option 1">
+                                    </div>
+                                    <div class="quesOption">
+                                        <input type="text" placeholder="Option 2">
+                                    </div>
+                                    <div class="quesOption">
+                                        <input type="text" placeholder="Option 3">
+                                    </div>
+                                    <div class="quesOption">
+                                        <input type="text" placeholder="Option 4">
+                                        <button>Save</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="questionContainer">
+                                <div class="quesText">
+                                    <input type="text" class="form-control" placeholder="Question 2">
+                                    <select class="form-select form-select-sm" name="quesType" id="quesType">
+                                        <option value="quesType">Subjective</option>
+                                        <option value="quesType">Objective</option>
+                                    </select>
+                                </div>
+                                <div class="quesOptions">
+                                </div>
+                            </div>
+                        </div>
+                        <button style="margin-top: 12px;" class="btn btn-outline-primary">Save/Add more</button>
+                    </div>
+                    <div class="assignmentsBottom">
+                        <button class="btn btn-primary">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <%- include("partials/footer") -%>
+    <script src="/js/subject.js"></script>
+</body>
+</html>
