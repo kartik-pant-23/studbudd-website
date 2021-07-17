@@ -76,6 +76,8 @@
                     <div class="scroll assignments">
                         <label class="form-col-label" for="title">Title</label>
                         <input class="form-control" type="text" name="title" id="title" placeholder="Assignment Title">
+                        <label class="form-col-label" for="desc">Description</label>
+                        <input class="form-control" type="text" name="desc" id="desc" placeholder="Assignment Description">
                         <label class="form-col-label" for="submissionDate">Submission Date</label>
                         <input class="form-control" type="datetime-local" name="submissionDate" id="submissionDate">
                         <div class="fileInputDiv">
@@ -85,43 +87,18 @@
                         </div>
                         <div style="text-align: center;"><strong>OR</strong></div>
                         <div class="questions" id="questions">
-                            <div class="questionContainer">
+                            <div id="ques0" class="questionContainer">
                                 <div class="quesText">
-                                    <input type="text" class="form-control" placeholder="Question 1">
-                                    <select class="form-select form-select-sm" name="quesType" id="quesType">
-                                        <option value="quesType">Subjective</option>
-                                        <option value="quesType">Objective</option>
+                                    <textarea class="form-control" placeholder="Question 1" rows="1"></textarea>
+                                    <select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')">
+                                        <option value="0">Subjective</option>
+                                        <option value="1">Objective</option>
                                     </select>
-                                </div>
-                                <div class="quesOptions">
-                                    <div class="quesOption">
-                                        <input type="text" placeholder="Option 1">
-                                    </div>
-                                    <div class="quesOption">
-                                        <input type="text" placeholder="Option 2">
-                                    </div>
-                                    <div class="quesOption">
-                                        <input type="text" placeholder="Option 3">
-                                    </div>
-                                    <div class="quesOption">
-                                        <input type="text" placeholder="Option 4">
-                                        <button>Save</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="questionContainer">
-                                <div class="quesText">
-                                    <input type="text" class="form-control" placeholder="Question 2">
-                                    <select class="form-select form-select-sm" name="quesType" id="quesType">
-                                        <option value="quesType">Subjective</option>
-                                        <option value="quesType">Objective</option>
-                                    </select>
-                                </div>
-                                <div class="quesOptions">
                                 </div>
                             </div>
                         </div>
-                        <button style="margin-top: 12px;" class="btn btn-outline-primary">Save/Add more</button>
+                        <button style="margin-top: 12px;" class="btn btn-outline-primary" onclick="resetQuestions()">Reset</button>
+                        <button style="margin-top: 12px;" class="btn btn-primary" onclick="addMoreQuestions()">Save/Add more</button>
                     </div>
                     <div class="assignmentsBottom">
                         <button class="btn btn-primary">Create</button>
