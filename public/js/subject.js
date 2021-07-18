@@ -2,6 +2,11 @@ function $(id) {
     return document.getElementById(id);
 }
 
+const baseUrl = window.location.origin;
+const token = window.localStorage.getItem("token");
+const subjectId = window.location.pathname.split('/').reverse()[0];
+
+// Adding Assignments
 function resetQuestions() {
     const questions = $('questions');
     questions.innerHTML = `<div id="ques0" class="questionContainer"><div class="quesText"><textarea class="form-control" placeholder="Question 1" rows="1"></textarea><select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div>`;
@@ -40,7 +45,6 @@ function addMoreQuestions() {
         questions.appendChild(newQuesContainer);
     }
 }
-
 function addMoreOptions(id) {
     const optionsContainer = $(id);
     const last = optionsContainer.lastChild;
@@ -73,4 +77,138 @@ function changeQuestionType(id) {
     } else {
         if(options) options.style.display = "none";
     }
+}
+function getQuestions() {
+    const questions = $("questions");
+    var data = [];
+    Array.from(questions.children).forEach(question => {
+        var questionText = question.firstElementChild;
+        var questionOptions = question.lastElementChild;
+        if(questionText.firstElementChild.disabled) {
+            var quesData = {};
+            quesData["question"] = questionText.firstElementChild.value;
+            quesData["type"] = questionText.lastElementChild.value;
+
+            if(quesData["type"] == 1) {
+                quesData["options"] = [];
+                Array.from(questionOptions.children).forEach((opt, idx, arr) => {
+                    if(idx != arr.length-1) {
+                        quesData["options"].push(opt.firstChild.value);
+                    }
+                })
+            }
+
+            data.push(quesData);
+        }
+    });
+    return data;
+}
+function submitAssignment() {
+    const createBtn = $("createAssignmentBtn");
+    const title = $("assignmentTitle").value;
+    const description = $("assignmentDesc").value;
+    const date = $("assignmentSubmissionDate").value;
+    const file = $("assignment").files[0]; 
+    const questions = getQuestions();
+
+    var shouldContinue = true;
+    if(!title || title.trim()=="") {
+        shouldContinue = false;
+        alert("Title is mandatory!");
+    } else if(!date) {
+        shouldContinue = false;
+        alert("Submission Date is mandatory!");
+    } else if(!file && questions.length == 0) {
+        shouldContinue = false;
+        alert("Either a file or questions must be added!\nAlert: In case both are added.. file is chosen!");
+    }
+
+    if(shouldContinue) {
+        createBtn.innerText = "Adding...";
+        createBtn.disabled = true;
+
+        function handleResponse(res) {
+            res.json().then(data => {
+                if(res.status == 200) {
+                    console.log(data);
+                    $("assignmentTitle").value = null;
+                    $("assignmentDesc").value = null;
+                    $("assignmentSubmissionDate").value = null;
+                    $("assignment").value = null;
+                    resetQuestions();
+                }
+                else {
+                    alert(`Error Message: ${data.message}`);
+                }
+            }).catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+            })
+            createBtn.innerText = "Create";
+            createBtn.disabled = false;
+        }
+
+        if(file) {
+            var body = new FormData();
+            body.append("file", file);
+            body.append("title", title);
+            body.append("submissionDate", new Date(date).toISOString());
+            body.append("subject", subjectId);
+            if(description) body.append("description", description);
+            fetch(`${baseUrl}/api/assignment/upload_doc`, {
+                method: "POST",
+                headers: { "token": token },
+                body: body
+            }).then(res => handleResponse(res))
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+                createBtn.innerText = "Create";
+                createBtn.disabled = false;
+            })
+        } else {
+            var body = {
+                title: title,
+                questions: questions,
+                submissionDate: new Date(date).toISOString(),
+                subject: subjectId
+            }
+            if(description) body.description = description;
+            fetch(`${baseUrl}/api/assignment/upload_form`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    "token": token
+                },
+                body: JSON.stringify(body)
+            }).then(res => handleResponse(res))
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+                createBtn.innerText = "Create";
+                createBtn.disabled = false;
+            })
+        }
+    }
+}
+
+function fileChosen(fileId, flagId) {
+    const file = $(fileId).value;
+    if(file) $(flagId).style.display = "initial";
+    else $(flagId).style.display = "none";
+}
+
+function setMinDate() {
+    var today = new Date();
+    var YYYY = today.getFullYear();
+    var MM = today.getMonth()+1; if(MM<10) MM = '0' + MM;
+    var DD = today.getDate(); if(DD<10) DD = '0' + DD;
+    var hh = today.getHours(); if(hh<10) hh = '0' + hh;
+    var mm = today.getMinutes(); if(mm<10) mm = '0' + mm; 
+    today = YYYY+"-"+MM+"-"+DD+"T"+hh+":"+mm;
+    $("assignmentSubmissionDate").setAttribute("min", today);
+}
+
+window.onload = function() {
+    setMinDate();
 }

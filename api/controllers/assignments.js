@@ -7,7 +7,7 @@ const Document = require("../models/document");
 const Assignment = require("../models/assignment");
 
 exports.uploadDoc = (req,res) => {
-    const { tag, marks, submissionDate, subject } = req.body;
+    const { title, description, marks, submissionDate, subject } = req.body;
 
     var file = req.file;
     const _id = new mongoose.Types.ObjectId(); // _id for document
@@ -19,7 +19,8 @@ exports.uploadDoc = (req,res) => {
         else {
             const document = Document({
                 _id: _id,
-                tag: tag,
+                tag: title,
+                description: description,
                 url: url,
                 key: file.originalname,
                 ref: subject,
@@ -28,10 +29,12 @@ exports.uploadDoc = (req,res) => {
             document.save()
             .then(doc => {
                 const assignment = Assignment({
+                    title: title,
+                    description: description,
                     subject: subject,
                     document: doc._id,
                     marks: marks,
-                    submissionDate: new Date(submissionDate),
+                    submissionDate: submissionDate,
                     uploadedBy: req.user._id
                 })
                 assignment.save()
