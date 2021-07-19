@@ -18,6 +18,9 @@
                     <label class="btn btn-outline-primary" for="assignment">Upload</label>
                     <button class="btn btn-primary">Archive</button>
                 </div><hr>
+                <div id="loadingBadge" style="text-align: center; display: none;">
+                    <span class="badge badge-info">Loading more chats...</span>
+                </div>
                 <div class="scroll" id="messages"></div>
                 <form id="inputContainer">
                     <input class="form-control" type="text" name="chat" id="chat" placeholder="Type something..." oninput="onChatInputChanged()">
@@ -69,20 +72,6 @@
 </html>
 
 <!-- Normal Chat Item -->
-<!-- 1. Self -->
-<!-- <div class="chat chat-self"></div> -->
-<!-- 2. Other(First Message) -->
-<!-- <div class="chat chat-other chat-top"><strong id="sender"><br></strong></div> -->
-<!-- 3. Other(Second and later messages) -->
-<!-- <div class="chat chat-other"></div> -->
-<!-- 4. Assignment -->
-<!-- <div class="assignmentItem">
-    <h6><strong>Assignment 1</strong></h6>
-    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa accusamus consequatur ea ducimus sit porro rerum assumenda ullam omnis voluptates! Nesciunt tempora perferendis optio omnis.</div>
-    <div class="details-right">
-        <u>Deadline</u> - <strong>15/07/2021 17:00 UTC</strong>
-    </div>
-</div> -->
 <!-- 5. Note -->
 <!-- <div class="noteItem">
     <h6><strong>Chapter 1 - Data Structures and Algorithms</strong></h6>

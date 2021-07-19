@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const AssignmentSchema = mongoose.Schema({
     title: { type: String, required: true, trim: true },
     description: { type: String, trim: true },
-    document: { type: mongoose.SchemaTypes.ObjectId, reference: "Document" },
+    document: { type: mongoose.SchemaTypes.ObjectId, ref: "Document" },
     subject: { type: mongoose.SchemaTypes.ObjectId, required: true },
     marks: { type: Number, default: 0 },
     type: { type: Number, default: 0 }, // type:0-> documents, 1-> Typed Questions

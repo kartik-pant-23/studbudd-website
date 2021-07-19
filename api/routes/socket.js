@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const Faculty = require("../models/faculty");
 const Student = require("../models/student");
+const { insertChatItem, getChats } = require("../controllers/chats");
 
 async function getUserData(decode) {
     try {
@@ -20,33 +21,42 @@ async function getUserData(decode) {
     }
 }
 
-function saveMessage(message, callback) {
-    return callback(null, message);
-}
-
 module.exports = (socket) => {
-    // Authorize user and send chat data
     socket.emit("auth");
     socket.on("auth", async data => {
-        socket.join(data.subjectId);
+        socket.join(data.reference);
         try {
-            const decode = await jwt.verify(data.token, process.env.JWT_KEY);
+            const decode = jwt.verify(data.token, process.env.JWT_KEY);
             const userData = await getUserData(decode);
-            socket.emit("userData", userData);
+            const chats = await getChats(data.reference, 0, 50);
+            socket.emit("userData", {
+                userData: userData,
+                chats: chats.reverse()
+            });
         } catch(err) {
             console.log(err);
             socket.emit("userData", { error: err });
         }
     });
 
-    socket.on("chat", (data) => {
-        saveMessage(data, (err, savedMessage) => {
-            if(err) socket.emit("chat-self", { error: err });
-            else {
-                socket.to(data.subjectId).emit("chat", savedMessage);
-                // socket.broadcast.emit("chat", savedMessage);
-                socket.emit("chat", savedMessage);
-            }
-        })
+    socket.on("chat", async (data) => {
+        try {
+            const savedMessage = await insertChatItem(data);
+            socket.to(data.reference).emit("chat", savedMessage);
+            socket.emit("chat", savedMessage);
+        } catch (err) {
+            console.log(err);
+            socket.emit("chat", { error: err });
+        }
+    });
+
+    socket.on("loadMoreChat", async ({reference, skipCount}) => {
+        try {
+            const moreChats = await getChats(reference, skipCount, 50);
+            socket.emit("loadedChats", moreChats.reverse());
+        } catch(err) {
+            console.log(err);
+            socket.emit("loadedChats", { error: err });
+        }
     })
 }

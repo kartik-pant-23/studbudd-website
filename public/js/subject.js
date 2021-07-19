@@ -212,6 +212,16 @@ function setMinDate() {
 }
 
 // Handling messages and socket
+function handleScroll() {
+    msgContainer = $("messages");
+    const scrollTop = msgContainer.scrollTop;
+    const scrollHeight = msgContainer.scrollHeight;
+    const clientHeight = msgContainer.clientHeight;
+
+    if(scrollTop+scrollHeight > clientHeight) {
+        msgContainer.scrollTop = scrollHeight;
+    }
+}
 function onChatInputChanged() {
     const chat = $("chat").value;
     if(chat && chat.trim()!="") $("sendChatButton").disabled = false;
@@ -223,59 +233,106 @@ $("inputContainer").addEventListener("submit", function(e) {
         sender: userId,
         senderName: userName,
         message: $("chat").value,
-        subjectId: subjectId
+        reference: subjectId
     };
     $("chat").value = null;
     $("sendChatButton").disabled = true;
     socket.emit("chat", data);
-})
-function sendMessage() {
-    const data = {
-        sender: userId,
-        senderName: userName,
-        message: $("chat").value,
-        subjectId: subjectId
-    };
-    $("chat").value = null;
-    $("sendChatButton").disabled = true;
-    socket.emit("chat", data);
+});
+function createNoteContainer(data, flag=false) {}
+function createAssignmentContainer(data, flag=false) {
+    if(!flag) chatData.push(data);
+    const { assignment } = data;
+    var date = new Date(assignment.submissionDate);
+    var hh = date.getHours(); if(hh<10) hh = '0'+hh;
+    var mm = date.getMinutes(); if(mm<10) mm = '0'+mm;
+    date = `${date.toDateString()}, ${hh}:${mm}`;
+
+    const container = document.createElement("div");
+    container.className = "assignmentItem";
+    container.innerHTML = `<h6><strong>${assignment.title}</strong></h6><div>${assignment.description}</div><div class="details-right"><u>Deadline</u> - <strong>${date}</strong></div>`;
+
+    if(flag) return container;
+    $("messages").appendChild(container);
+    handleScroll();
 }
-function createChatContainer(data) {
+function createExamContainer(data, flag=false) {}
+function createChatContainer(data, flag=false) {
     var isSelf = data.sender == userId;
-    var isTop = chatData.length == 0 || chatData.reverse()[0].sender != data.sender;
-    chatData.push(data);
+    var isTop = !(flag) && (chatData.length == 0 || chatData.reverse()[0].sender != data.sender);
+    if(!flag) chatData.push(data);
 
     const container = document.createElement("div");
     container.className = `chat chat-${isSelf ?'self' :'other'} ${isTop ?'chat-top' :''}`;
     container.innerHTML = `${!isSelf && isTop ?`<strong>${data.senderName}</strong><br>` :''}${data.message}`;
 
-    const msgContainer = $("messages");
-    msgContainer.appendChild(container);
-
-    // Scroll
-    const scrollTop = msgContainer.scrollTop;
-    const scrollHeight = msgContainer.scrollHeight;
-    const clientHeight = msgContainer.clientHeight;
-
-    if(scrollTop+scrollHeight > clientHeight) {
-        msgContainer.scrollTop = scrollHeight;
-    }
+    if(flag) return container;
+    $("messages").appendChild(container);
+    handleScroll();
+}
+function createErrorChatMessage(msg, flag=false) {
+    const container = document.createElement("div");
+    container.className = "chat chat-self text-danger";
+    container.innerHTML = `<strong>Error - </strong>${msg}<br><strong>If the problem persists re-login might help!</strong>`;
+    if(flag) return container;
+    $("messages").appendChild(container);
 }
 function handleSocket(socket) {
-    socket.on("auth", () => socket.emit("auth", { token: token, subjectId: subjectId }));
+    socket.on("auth", () => socket.emit("auth", { token: token, reference: subjectId }));
     socket.on("userData", data => {
         if(data.error) alert("Something went wrong! Interaction disabled!");
         else {
-            userId = data._id;
-            userName = data.name;
+            var { userData, chats } = data;
+            userId = userData._id;
+            userName = userData.name;
+            chatData.length = 0;
+            chats.forEach(chatItem => {
+                if(chatItem.message) createChatContainer(chatItem);
+                else if(chatItem.assignment) createAssignmentContainer(chatItem);
+                else if(chatItem.note) createNoteContainer(chatItem);
+                else if(chatItem.examination) createExamContainer(chatItem);
+            });
         }
     })
     socket.on("chat", message => {
-        createChatContainer(message);
+        if(message.error) createErrorChatMessage(message.error.message || "Some unknown error occurred!");
+        else {
+            if(message.message) createChatContainer(message);
+            else if(message.assignment) createAssignmentContainer(message);
+            else if(message.note) createNoteContainer(message);
+            else if(message.examination) createExamContainer(message);
+        }
+    });
+    socket.on("loadedChats", data => {
+        $("loadingBadge").style.display = "none";
+        const messages = $("messages");
+        if(data.error) {
+            var container = createErrorChatMessage(data.error.message || "Some unknown error occurred!", true);
+            messages.insertBefore(container, messages.children[0]);
+        }
+        else {
+            chatData = data.concat(chatData);
+            data.reverse().forEach(message => {
+                var container;
+                if(message.message) 
+                    container = createChatContainer(message, true);
+                else if(message.assignment) 
+                    container = createAssignmentContainer(message, true);
+                else if(message.note) 
+                    container = createNoteContainer(message, true);
+                else if(message.examination) 
+                    container = createExamContainer(message, true);
+                messages.insertBefore(container, messages.children[0]);
+            })
+        }
     });
 }
 function loadMoreMessages() {
-    console.log("Loading..");
+    $("loadingBadge").style.display = "block";
+    socket.emit("loadMoreChat", {
+        reference: subjectId,
+        skipCount: chatData.length
+    });
 }
 
 window.onload = function() {

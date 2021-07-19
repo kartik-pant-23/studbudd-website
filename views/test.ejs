@@ -28,7 +28,7 @@
             sender: userId,
             senderName: userName,
             message: chat.value,
-            subjectId: subjectId
+            reference: subjectId
         });
         chat.value = null;
     })
@@ -36,15 +36,15 @@
     socket.on("auth", () => {
         socket.emit("auth", {
             token: token,
-            subjectId: subjectId
+            reference: subjectId
         });
     });
 
     socket.on("userData", data => {
         if(data.error) alert("Something went wrong! Interaction disabled!");
         else {
-            userId = data._id;
-            userName = data.name;
+            userId = data.userData._id;
+            userName = data.userData.name;
         }
     });
 
