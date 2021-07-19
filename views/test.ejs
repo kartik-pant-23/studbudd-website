@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Chat Test</title>
+</head>
+<body>
+    <form id="form">
+        <input type="text" name="chat" id="chat">
+        <button type="submit">Send</button>
+    </form>
+    <div id="messages"></div>
+</body>
+<script>
+    var socket = io();
+    var userId, userName;
+    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MGU3M2QzY2U4MWIxYjFkMjllN2Q5Y2IiLCJyb2xlIjoic3R1ZGVudCIsImRvbWFpbiI6ImlpaXRiaG9wYWwuYWMuaW4iLCJpYXQiOjE2MjY2ODI3MjEsImV4cCI6MTYyOTI3NDcyMX0.IueY9lFEAaUzectftCqwbAAQ7lLOzRskXhk_sC3xgaI";
+    const subjectId = "60e6f699ac90da58b51c18fa";
+    const chat = document.getElementById("chat");
+    const form = document.getElementById("form");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        socket.emit("chat", {
+            sender: userId,
+            senderName: userName,
+            message: chat.value,
+            subjectId: subjectId
+        });
+        chat.value = null;
+    })
+
+    socket.on("auth", () => {
+        socket.emit("auth", {
+            token: token,
+            subjectId: subjectId
+        });
+    });
+
+    socket.on("userData", data => {
+        if(data.error) alert("Something went wrong! Interaction disabled!");
+        else {
+            userId = data._id;
+            userName = data.name;
+        }
+    });
+
+    socket.on("chat", data => {
+        const chatItem = document.createElement('div');
+        chatItem.innerHTML = `<strong>${data.sender == userId ?"You" :data.senderName} - </strong>${data.message}`;
+        document.getElementById("messages").appendChild(chatItem);
+    })
+</script>
+</html>

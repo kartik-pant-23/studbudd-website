@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <%- include("partials/bootstrap") -%>
+    <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="/css/subject.css">
     <title>Subjects Overview</title>
 </head>
@@ -17,55 +18,11 @@
                     <label class="btn btn-outline-primary" for="assignment">Upload</label>
                     <button class="btn btn-primary">Archive</button>
                 </div><hr>
-                <div class="scroll" id="notes">
-                    <div class="chat chat-self">Hello students! I am scheduling an exam for you all. Be ready with chapter-2.</div>
-                    <div class="chat chat-other chat-top">
-                        <strong id="sender">Kartik Pant<br></strong>
-                        Thank you ma'am, but we don't want this!
-                    </div>
-                    <div class="chat chat-other">
-                        <strong id="sender"></strong>
-                        Yes ma'am.. take this notice back.
-                    </div>
-                    <div class="noteItem">
-                        <h6><strong>Chapter 1 - Data Structures and Algorithms</strong></h6>
-                        <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. At qui accusantium delectus molestias illum, assumenda facilis unde ex aliquam, mollitia quisquam. Recusandae, veniam earum. Suscipit omnis et quidem magni distinctio, culpa voluptatum explicabo ab cum maiores nam vitae. Eum et nostrum iusto praesentium qui sint eveniet modi fuga dolor repudiandae.</div>
-                    </div>
-                    <div class="chat chat-other chat-top">
-                        <strong id="sender">Kartik Pant<br></strong>
-                        Thank you ma'am, but we don't want this!
-                    </div>
-                    <div class="chat chat-other">
-                        <strong id="sender"></strong>
-                        Yes ma'am.. take this notice back.
-                    </div>
-                    <div class="assignmentItem">
-                        <h6><strong>Assignment 1</strong></h6>
-                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa accusamus consequatur ea ducimus sit porro rerum assumenda ullam omnis voluptates! Nesciunt tempora perferendis optio omnis.</div>
-                        <div class="details-right">
-                            <u>Deadline</u> - <strong>15/07/2021 17:00 UTC</strong>
-                        </div>
-                    </div>
-                    <div class="chat chat-other chat-top">
-                        <strong id="sender">Kartik Pant<br></strong>
-                        Thank you ma'am, but we don't want this!
-                    </div>
-                    <div class="chat chat-other">
-                        <strong id="sender"></strong>
-                        Yes ma'am.. take this notice back.
-                    </div>
-                    <div class="examItem">
-                        <h6><strong>Mid Term Examination </strong>(50-Marks) | 3 hours</h6>
-                        <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident beatae nemo maiores, deserunt earum amet?</div>
-                        <div class="details-right">
-                            <u>Date</u> - <strong>25/07/2021 10:00 UTC</strong>
-                        </div>
-                    </div>
-                </div>
-                <div id="inputContainer">
-                    <input class="form-control" type="text" name="chat" id="chat" placeholder="Type something...">
-                    <button class="btn btn-primary">Send</button>
-                </div>
+                <div class="scroll" id="messages"></div>
+                <form id="inputContainer">
+                    <input class="form-control" type="text" name="chat" id="chat" placeholder="Type something..." oninput="onChatInputChanged()">
+                    <button type="submit" id="sendChatButton" class="btn btn-primary" disabled>Send</button>
+                </form>
             </div>
             <div class="card no-scroll" id="assignments">
                 <div class="container-header">
@@ -110,3 +67,32 @@
     <script src="/js/subject.js"></script>
 </body>
 </html>
+
+<!-- Normal Chat Item -->
+<!-- 1. Self -->
+<!-- <div class="chat chat-self"></div> -->
+<!-- 2. Other(First Message) -->
+<!-- <div class="chat chat-other chat-top"><strong id="sender"><br></strong></div> -->
+<!-- 3. Other(Second and later messages) -->
+<!-- <div class="chat chat-other"></div> -->
+<!-- 4. Assignment -->
+<!-- <div class="assignmentItem">
+    <h6><strong>Assignment 1</strong></h6>
+    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa accusamus consequatur ea ducimus sit porro rerum assumenda ullam omnis voluptates! Nesciunt tempora perferendis optio omnis.</div>
+    <div class="details-right">
+        <u>Deadline</u> - <strong>15/07/2021 17:00 UTC</strong>
+    </div>
+</div> -->
+<!-- 5. Note -->
+<!-- <div class="noteItem">
+    <h6><strong>Chapter 1 - Data Structures and Algorithms</strong></h6>
+    <div>Lorem, ipsum dolor sit amet consectetur adipisicing elit. At qui accusantium delectus molestias illum, assumenda facilis unde ex aliquam, mollitia quisquam. Recusandae, veniam earum. Suscipit omnis et quidem magni distinctio, culpa voluptatum explicabo ab cum maiores nam vitae. Eum et nostrum iusto praesentium qui sint eveniet modi fuga dolor repudiandae.</div>
+</div> -->
+<!-- 6. Exam -->
+<!-- <div class="examItem">
+    <h6><strong>Mid Term Examination </strong>(50-Marks) | 3 hours</h6>
+    <div>Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident beatae nemo maiores, deserunt earum amet?</div>
+    <div class="details-right">
+        <u>Date</u> - <strong>25/07/2021 10:00 UTC</strong>
+    </div>
+</div> -->

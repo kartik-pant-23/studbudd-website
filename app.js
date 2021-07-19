@@ -9,14 +9,12 @@ const classesRouter = require('./api/routes/classes');
 const documentsRouter = require('./api/routes/documents');
 const assignmentsRouter = require("./api/routes/assignments");
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 
 app.use(express.static("public"));
-
 
 // Allowing requests from all origins and all headers
 // Setting allowed methods
@@ -33,9 +31,7 @@ app.use((req, res, next) => {
 // Connect with database
 connectDB();
 
-
 //Frontend code
-
 app.get("/", (req, res) => res.render("home"));
 app.get("/signin/:url", (req, res) => 
     res.render("signin", {data: req.params['url']}));
@@ -51,7 +47,6 @@ app.get('/sample_faculty', (req, res) =>
     res.download(__dirname+"/assets/teachers_data.csv"));
 app.get('/sample_student', (req, res) => 
     res.download(__dirname+"/assets/students_data.csv"));
-app.get("/error", (req, res) => res.render("error"));
 
 //Backend code
 
@@ -70,7 +65,10 @@ app.use('/api/class', classesRouter);
 app.use('/api/document', documentsRouter);
 app.use('/api/assignment', assignmentsRouter);
 app.get('/sample_faculty', (req, res) => 
-    res.download(__dirname+'/assets/teachers_data.csv'))
+    res.download(__dirname+'/assets/teachers_data.csv'));
+app.get('/sample_student', (req, res) => 
+    res.download(__dirname+'/assets/students_data.csv'));
+app.get("/test", (req, res) => res.render("test"));
 
 // Handle 404 error
 app.use((req, res) => {

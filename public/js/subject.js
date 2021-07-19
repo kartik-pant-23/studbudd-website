@@ -2,6 +2,8 @@ function $(id) {
     return document.getElementById(id);
 }
 
+const socket = io();
+var userName, userId, chatData = [];
 const baseUrl = window.location.origin;
 const token = window.localStorage.getItem("token");
 const subjectId = window.location.pathname.split('/').reverse()[0];
@@ -209,6 +211,78 @@ function setMinDate() {
     $("assignmentSubmissionDate").setAttribute("min", today);
 }
 
+// Handling messages and socket
+function onChatInputChanged() {
+    const chat = $("chat").value;
+    if(chat && chat.trim()!="") $("sendChatButton").disabled = false;
+    else $("sendChatButton").disabled = true;
+}
+$("inputContainer").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const data = {
+        sender: userId,
+        senderName: userName,
+        message: $("chat").value,
+        subjectId: subjectId
+    };
+    $("chat").value = null;
+    $("sendChatButton").disabled = true;
+    socket.emit("chat", data);
+})
+function sendMessage() {
+    const data = {
+        sender: userId,
+        senderName: userName,
+        message: $("chat").value,
+        subjectId: subjectId
+    };
+    $("chat").value = null;
+    $("sendChatButton").disabled = true;
+    socket.emit("chat", data);
+}
+function createChatContainer(data) {
+    var isSelf = data.sender == userId;
+    var isTop = chatData.length == 0 || chatData.reverse()[0].sender != data.sender;
+    chatData.push(data);
+
+    const container = document.createElement("div");
+    container.className = `chat chat-${isSelf ?'self' :'other'} ${isTop ?'chat-top' :''}`;
+    container.innerHTML = `${!isSelf && isTop ?`<strong>${data.senderName}</strong><br>` :''}${data.message}`;
+
+    const msgContainer = $("messages");
+    msgContainer.appendChild(container);
+
+    // Scroll
+    const scrollTop = msgContainer.scrollTop;
+    const scrollHeight = msgContainer.scrollHeight;
+    const clientHeight = msgContainer.clientHeight;
+
+    if(scrollTop+scrollHeight > clientHeight) {
+        msgContainer.scrollTop = scrollHeight;
+    }
+}
+function handleSocket(socket) {
+    socket.on("auth", () => socket.emit("auth", { token: token, subjectId: subjectId }));
+    socket.on("userData", data => {
+        if(data.error) alert("Something went wrong! Interaction disabled!");
+        else {
+            userId = data._id;
+            userName = data.name;
+        }
+    })
+    socket.on("chat", message => {
+        createChatContainer(message);
+    });
+}
+function loadMoreMessages() {
+    console.log("Loading..");
+}
+
 window.onload = function() {
     setMinDate();
+    handleSocket(socket);
+    // Message container on scroll
+    $("messages").onscroll = function () {
+        if($("messages").scrollTop == 0) loadMoreMessages();
+    };
 }
