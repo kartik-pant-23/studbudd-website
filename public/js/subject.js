@@ -11,12 +11,13 @@ const subjectId = window.location.pathname.split('/').reverse()[0];
 // Adding Assignments
 function resetQuestions() {
     const questions = $('questions');
-    questions.innerHTML = `<div id="ques0" class="questionContainer"><div class="quesText"><textarea class="form-control" placeholder="Question 1" rows="1"></textarea><select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div>`;
+    questions.innerHTML = `<div id="ques0" class="questionContainer"><div class="quesText"><textarea class="form-control" placeholder="Question 1"></textarea><select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div>`;
 }
 function addMoreQuestions() {
     const questions = $("questions");
-    const lastQuesText = questions.lastElementChild.firstElementChild;
-    const lastQuesOptions = $(questions.lastElementChild.id+"-options");
+    const lastQues = questions.lastElementChild;
+    const lastQuesText = lastQues.firstElementChild;
+    const lastQuesOptions = $(lastQues.id+"-options");
     var shouldAdd = true;
 
     const quesValue = lastQuesText.firstElementChild.value;
@@ -42,9 +43,12 @@ function addMoreQuestions() {
         newQuesContainer.className = "questionContainer";
         newQuesContainer.setAttribute("id", quesId);
         newQuesContainer.innerHTML = `<div class="quesText">
-        <textarea class="form-control" placeholder="Question ${parseInt(questions.childElementCount)+1}" rows="1"></textarea>
+        <textarea class="form-control" placeholder="Question ${parseInt(questions.childElementCount)+1}"></textarea>
         <select class="quesType form-select form-select-sm" name="quesType" id="${quesId}-type" onchange="changeQuestionType('${quesId}')"><option value="0">Subjective</option><option value="1">Objective</option></select></div>`;
         questions.appendChild(newQuesContainer);
+
+        lastQues.style.borderColor = "#0d6dfd66";
+        lastQues.style.marginLeft = "0";
     }
 }
 function addMoreOptions(id) {
@@ -57,7 +61,7 @@ function addMoreOptions(id) {
         
         const newOption = document.createElement('div')
         newOption.className = "quesOption";
-        newOption.innerHTML = `<input type="text" placeholder="Option ${parseInt(optionsContainer.childElementCount)+1}"><button onclick="addMoreOptions('${id}')">Save</button>`;
+        newOption.innerHTML = `<input type="text" placeholder="Option ${parseInt(optionsContainer.childElementCount)+1}" autofocus="autofocus"><button onclick="addMoreOptions('${id}')">Save</button>`;
         optionsContainer.appendChild(newOption);
     } else {
         alert("Enter a value for the option!");
@@ -73,7 +77,7 @@ function changeQuestionType(id) {
             const container = document.createElement('div');
             container.className = "quesOptions";
             container.setAttribute('id', `${id}-options`);
-            container.innerHTML = `<div class="quesOption"><input type="text" placeholder="Option 1"><button onclick="addMoreOptions('${id}-options')">Save</button></div>`;
+            container.innerHTML = `<div class="quesOption"><input type="text" placeholder="Option 1"><button onclick="addMoreOptions('${id}-options')" autofocus="autofocus">Save</button></div>`;
             $(id).appendChild(container);
         }
     } else {
@@ -110,7 +114,7 @@ function submitAssignment() {
     const title = $("assignmentTitle").value;
     const description = $("assignmentDesc").value;
     const date = $("assignmentSubmissionDate").value;
-    const file = $("assignment").files[0]; 
+    const file = $("assignment").files[0];
     const questions = getQuestions();
 
     var shouldContinue = true;
@@ -132,12 +136,18 @@ function submitAssignment() {
         function handleResponse(res) {
             res.json().then(data => {
                 if(res.status == 200) {
-                    console.log(data);
                     $("assignmentTitle").value = null;
                     $("assignmentDesc").value = null;
                     $("assignmentSubmissionDate").value = null;
                     $("assignment").value = null;
                     resetQuestions();
+
+                    socket.emit("chat", {
+                        sender: userId,
+                        senderName: userName,
+                        reference: subjectId,
+                        assignment: data._id
+                    });
                 }
                 else {
                     alert(`Error Message: ${data.message}`);
@@ -194,6 +204,10 @@ function submitAssignment() {
     }
 }
 
+function resetFileSelection(fileId, flagId) {
+    $(fileId).value = null;
+    $(flagId).style.display = "none";
+}
 function fileChosen(fileId, flagId) {
     const file = $(fileId).value;
     if(file) $(flagId).style.display = "initial";

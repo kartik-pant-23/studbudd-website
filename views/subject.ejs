@@ -37,19 +37,19 @@
                     <input class="form-control" type="text" name="title" id="assignmentTitle" placeholder="Assignment Title">
                     <label class="form-col-label" for="desc">Description</label>
                     <input class="form-control" type="text" name="desc" id="assignmentDesc" placeholder="Assignment Description">
-                    <label class="form-col-label" for="submissionDate">Submission Date*</label>
+                    <label class="form-col-label" for="submissionDate">Submission Date*(On Firefox/Safari - <strong>YYYY-MM-DD hh:mm</strong>)</label>
                     <input class="form-control" type="datetime-local" name="submissionDate" id="assignmentSubmissionDate">
                     <div class="fileInputDiv">
-                        <strong>You can upload a document from your device. <span style="display: none;" id="assignmentChosen" class="badge badge-info">File chosen</span></strong>
+                        <strong>You can upload a document from your device. <span style="display: none; cursor: pointer;" id="assignmentChosen" class="badge badge-info" onclick="resetFileSelection('assignment', 'assignmentChosen')">File chosen. Reset?</span></strong>
                         <input style="display: none;" type="file" name="assignment" id="assignment" accept="image/*, .pdf" onchange="fileChosen('assignment', 'assignmentChosen')">
                         <label class="btn btn-outline-primary" for="assignment">Upload</label>
                     </div>
                     <div style="text-align: center;"><strong>OR</strong></div>
-                    <strong class="m-2 text-danger">Questions are NOT added if file is chosen, to deselect click on upload and return back without choosing.</strong>
+                    <strong class="m-2 text-danger">Questions are NOT added if file is chosen, to deselect click on reset button.</strong>
                     <div class="questions" id="questions">
                         <div id="ques0" class="questionContainer">
                             <div class="quesText">
-                                <textarea class="form-control" placeholder="Question 1" rows="1"></textarea>
+                                <textarea class="form-control" placeholder="Question 1"></textarea>
                                 <select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')">
                                     <option value="0">Subjective</option>
                                     <option value="1">Objective</option>

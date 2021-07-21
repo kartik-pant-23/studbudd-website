@@ -72,7 +72,7 @@ label { margin: 0; }
 #notesContainer>.container-header>button { margin-left: 4px; }
 #messages { background-color: #fafafa; }
 .chat {
-    width: fit-content;
+    width: max-content;
     max-width: 80%;
     padding: 4px 8px;
     margin: 1px 4px;
@@ -100,7 +100,7 @@ label { margin: 0; }
     margin-left: auto;
 }
 .noteItem:hover, .assignmentItem:hover, .examItem:hover {
-    box-shadow: 0px 0px 36px rgba(0, 0, 0, 0.20);
+    box-shadow: 0px 0px 16px rgba(0, 0, 0, 0.20);
 }
 .assignmentItem { background-color: #ffc107; }
 .details-right { text-align: right; }
@@ -126,11 +126,18 @@ label { margin: 0; }
 }
 .fileInputDiv>label { margin-left: auto; }
 
-.questionContainer { margin: 24px 0 }
+.questionContainer {
+    margin: 12px 0;
+    margin-left: 0px;
+    padding: 12px 12px;
+    border-left: 6px solid #0d6efd;
+    border-radius: 4px;
+    margin-left: 8px;
+}
 .quesText { display: flex; align-items: flex-end; }
 .quesText>.quesType { 
     margin-left: 4px;
-    width: fit-content; 
+    width: max-content; 
 }
 
 .quesOptions { margin-top: 8px; }

@@ -17,7 +17,7 @@ exports.insertChatItem = async function(data) {
     try {
         const chat = new Chat(data);
         const savedChat = await chat.save();
-        return savedChat.populate('assignment note examination');
+        return await Chat.populate(savedChat, 'assignment note examination');
     } catch (err) {
         throw err;
     }
