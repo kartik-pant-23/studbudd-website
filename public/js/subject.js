@@ -3,7 +3,7 @@ function $(id) {
 }
 
 const socket = io();
-var userName, userId, chatData = [];
+var userName, userId, chatData = [], faculty = [];
 const baseUrl = window.location.origin;
 const token = window.localStorage.getItem("token");
 const subjectId = window.location.pathname.split('/').reverse()[0];
@@ -349,7 +349,105 @@ function loadMoreMessages() {
     });
 }
 
+function currentFaculty(data, isCurrent = false) {
+    const innerHTML = `<img src="${data.img_url}" height="50px" width="50px">&nbsp;&nbsp;<div>${data.name}<br><small>${data.email}</small></div>`;
+    if(isCurrent) {
+        $("currentFacultyDetails").innerHTML = innerHTML;
+    } else {
+        $("selectedFacultyDetails").innerHTML = innerHTML;
+    }
+}
+function facultySelected() {
+    const id = $("facultySelected").value;
+    currentFaculty(faculty.find(obj => obj._id == id));
+}
+function changeFaculty() {
+    const btn = $("change-faculty-btn");
+    const coordinator = $("facultySelected").value;
+    if(coordinator != "none") {
+        btn.innerText = "Changing...";
+        btn.disabled = true;
+
+        fetch(`${baseUrl}/api/class/subject/${subjectId}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json",
+                "token": token
+            },
+            body: JSON.stringify({ coordinator: coordinator })
+        }).then(res => {
+            if(res.status == 200) {
+                currentFaculty(faculty.find(obj => obj._id == coordinator), true);
+                $("close-changeFaculty-modal").click();
+            } else {
+                alert("Something went wrong!");
+            }
+            btn.innerText = "Change";
+            btn.disabled = false;
+        }).catch(err => {
+            alert("Something went wrong!");
+            console.log(err);
+        })
+    }
+}
+
+function updateUI(data) {
+    var subjectCode = (data.subjectCode) ?`(${data.subjectCode})` :"";
+    $("subjectTag").innerHTML = `${data.name} <small>${subjectCode}</small>`;
+    document.title = `${data.name} ${subjectCode} | Studbudd`;
+
+    // Updating faculty list in change faculty
+    var currFaculty = data.coordinator;
+    const facultyOptions = $("facultySelected");
+    function containerValue(value, title) {
+        var option = document.createElement('option');
+        option.setAttribute("value", value);
+        option.innerText = title;
+        return option;
+    }
+    if(currFaculty) {
+        currentFaculty(currFaculty);
+        currentFaculty(currFaculty, true);
+    }
+    else {
+        facultyOptions.appendChild(containerValue("none", "None"));
+        $("currentFacultyDetails").innerHTML = "<em>-----None Selected-----</em>";
+        $("selectedFacultyDetails").innerHTML = "<em>-----None Selected-----</em>";
+    } 
+    faculty.forEach(obj => {
+        if(currFaculty && obj._id == currFaculty._id) {
+            var opt = containerValue(obj._id, obj.name);
+            opt.selected = true;
+            facultyOptions.insertBefore(opt, facultyOptions.children[0]);
+        } else {
+            facultyOptions.appendChild(containerValue(obj._id, obj.name));
+        }
+    })
+}
+function loadData() {
+    fetch(`${baseUrl}/api/class/subject/${subjectId}`, {
+        method: "GET",
+        headers: { "token": token }
+    }).then(res => {
+        res.json().then(data => {
+            if(res.status == 200) {
+                faculty = data.faculty;
+                updateUI(data.subject);
+            } else {
+                alert(`Error Message: ${data.message}`);
+            }
+        }).catch(err => {
+            console.log(err);
+            alert("Something went wrong!");
+        })
+    }).catch(err => {
+        console.log(err);
+        alert("Something went wrong!");
+    })
+}
+
 window.onload = function() {
+    loadData();
     setMinDate();
     handleSocket(socket);
     // Message container on scroll

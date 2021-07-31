@@ -2,8 +2,10 @@ const Class = require('../models/class');
 const Organization = require('../models/organization');
 const Document = require('../models/document');
 const Student = require("../models/student");
+const Faculty = require("../models/faculty");
 
 const error_handler = require('../../middleware/error_handler');
+const faculty = require('../models/faculty');
 
 exports.getClassesInBatch = (req,res) => {
     Organization.findOne(
@@ -105,6 +107,28 @@ exports.updateClass = (req, res) => {
         .catch(err => error_handler(res, err));
 }
 
+// Get a subject details
+exports.getSubjectDetails = (req, res) => {
+    const subjectId = req.params['_id'];
+    Class.findOne({ 'subjects._id': subjectId })
+    .select('subjects')
+    .populate('subjects.coordinator')
+    .exec()
+    .then(({subjects}) => {
+        const subject = Array.from(subjects).find(subject => subject._id == subjectId);
+        Faculty.find({ email: { $regex: `@${req.user.domain}` }})
+        .select('name email img_url')
+        .exec()
+        .then(faculty => {
+            res.status(200).json({
+                subject: subject,
+                faculty: faculty
+            });
+        })
+        .catch(err => error_handler(res, err));
+    })
+    .catch(err => error_handler(res, err));
+}
 // Update a subjects details
 exports.patchSubject = (req, res) => {
     const subjectId = req.params['_id'];

@@ -9,63 +9,175 @@
 <body>
     <%- include("partials/navbar") -%>
     <main>
-        <header><h3>Engineering Mathematics</h3></header>
-        <div class="row">
-            <div class="card-no-color no-scroll" id="notesContainer">
-                <div class="container-header">
-                    <h5>Interact</h5>
-                    <input style="display: none;" type="file" name="notes" id="notes" accept="image/*, .pdf">
-                    <label class="btn btn-outline-primary" for="assignment">Upload</label>
-                    <button class="btn btn-primary">Archive</button>
-                </div><hr>
-                <div id="loadingBadge" style="text-align: center; display: none;">
-                    <span class="badge badge-info">Loading more chats...</span>
-                </div>
-                <div class="scroll" id="messages"></div>
-                <form id="inputContainer">
-                    <input class="form-control" type="text" name="chat" id="chat" placeholder="Type something..." oninput="onChatInputChanged()">
-                    <button type="submit" id="sendChatButton" class="btn btn-primary" disabled>Send</button>
-                </form>
-            </div>
-            <div class="card no-scroll" id="assignments">
-                <div class="container-header">
-                    <h5>Assignments</h5>
-                    <button class="btn btn-primary">Archive</button>
-                </div><hr>
-                <div class="scroll assignments">
-                    <label class="form-col-label" for="title">Title*</label>
-                    <input class="form-control" type="text" name="title" id="assignmentTitle" placeholder="Assignment Title">
-                    <label class="form-col-label" for="desc">Description</label>
-                    <input class="form-control" type="text" name="desc" id="assignmentDesc" placeholder="Assignment Description">
-                    <label class="form-col-label" for="submissionDate">Submission Date*(On Firefox/Safari - <strong>YYYY-MM-DD hh:mm</strong>)</label>
-                    <input class="form-control" type="datetime-local" name="submissionDate" id="assignmentSubmissionDate">
-                    <div class="fileInputDiv">
-                        <strong>You can upload a document from your device. <span style="display: none; cursor: pointer;" id="assignmentChosen" class="badge badge-info" onclick="resetFileSelection('assignment', 'assignmentChosen')">File chosen. Reset?</span></strong>
-                        <input style="display: none;" type="file" name="assignment" id="assignment" accept="image/*, .pdf" onchange="fileChosen('assignment', 'assignmentChosen')">
+        <section>
+            <header>
+                <h3 id="subjectTag"></h3>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changeFacultyModal">Change Faculty</button>
+            </header>
+            <div class="row">
+                <div class="card-no-color no-scroll small" id="notesContainer">
+                    <div class="container-header">
+                        <h5>Interact</h5>
+                        <input style="display: none;" type="file" name="notes" id="notes" accept="image/*, .pdf">
                         <label class="btn btn-outline-primary" for="assignment">Upload</label>
+                        <button class="btn btn-primary">Archive</button>
+                    </div><hr>
+                    <div id="loadingBadge" style="text-align: center; display: none;">
+                        <span class="badge badge-info">Loading more chats...</span>
                     </div>
-                    <div style="text-align: center;"><strong>OR</strong></div>
-                    <strong class="m-2 text-danger">Questions are NOT added if file is chosen, to deselect click on reset button.</strong>
-                    <div class="questions" id="questions">
-                        <div id="ques0" class="questionContainer">
-                            <div class="quesText">
-                                <textarea class="form-control" placeholder="Question 1"></textarea>
-                                <select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')">
-                                    <option value="0">Subjective</option>
-                                    <option value="1">Objective</option>
-                                </select>
+                    <div class="scroll" id="messages"></div>
+                    <form id="inputContainer">
+                        <input class="form-control" type="text" name="chat" id="chat" placeholder="Type something..." oninput="onChatInputChanged()">
+                        <button type="submit" id="sendChatButton" class="btn btn-primary" disabled>Send</button>
+                    </form>
+                </div>
+                <div class="card no-scroll big" id="assignments">
+                    <div class="container-header">
+                        <h5>Assignments</h5>
+                        <button class="btn btn-primary">Archive</button>
+                    </div><hr>
+                    <div class="scroll assignments">
+                        <label class="form-col-label" for="title">Title*</label>
+                        <input class="form-control" type="text" name="title" id="assignmentTitle" placeholder="Assignment Title">
+                        
+                        <label class="form-col-label" for="desc">Description(Optional)</label>
+                        <textarea class="form-control" type="text" name="desc" id="assignmentDesc" placeholder="Assignment Description"></textarea>
+                        
+                        <label class="form-col-label" for="submissionDate">Submission Date*(On Firefox/Safari - <strong>YYYY-MM-DD hh:mm</strong>)</label>
+                        <input class="form-control" type="datetime-local" name="submissionDate" id="assignmentSubmissionDate" placeholder="Submission Date">
+                        
+                        <div class="fileInputDiv">
+                            <strong>You can upload a document from your device. <span style="display: none; cursor: pointer;" id="assignmentChosen" class="badge badge-info" onclick="resetFileSelection('assignment', 'assignmentChosen')">File chosen. Reset?</span></strong>
+                            <input style="display: none;" type="file" name="assignment" id="assignment" accept="image/*, .pdf" onchange="fileChosen('assignment', 'assignmentChosen')">
+                            <label class="btn btn-outline-primary" for="assignment">Upload</label>
+                        </div>
+                        
+                        <div style="text-align: center;"><strong>OR</strong></div><br>
+                        
+                        <strong class="text-danger">Questions are NOT added if file is chosen, to deselect click on reset button.</strong>
+                        
+                        <div class="questions" id="questions">
+                            <div id="ques0" class="questionContainer">
+                                <div class="quesText">
+                                    <textarea class="form-control" placeholder="Question 1"></textarea>
+                                    <select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')">
+                                        <option value="0">Subjective</option>
+                                        <option value="1">Objective</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
+                        <button style="margin-top: 12px;" class="btn btn-outline-primary" onclick="resetQuestions()">Reset</button>
+                        <button style="margin-top: 12px;" class="btn btn-primary" onclick="addMoreQuestions()">Save/Add more</button>
                     </div>
-                    <button style="margin-top: 12px;" class="btn btn-outline-primary" onclick="resetQuestions()">Reset</button>
-                    <button style="margin-top: 12px;" class="btn btn-primary" onclick="addMoreQuestions()">Save/Add more</button>
+                    <div class="assignmentsBottom">
+                        <button id="createAssignmentBtn" class="btn btn-primary" onclick="submitAssignment()">Create</button>
+                    </div>
                 </div>
-                <div class="assignmentsBottom">
-                    <button id="createAssignmentBtn" class="btn btn-primary" onclick="submitAssignment()">Create</button>
+            </div>
+        </section>
+        <br>
+        <section>
+            <header>
+                <h3>Examination</h3>
+            </header>
+            <div class="row">
+                <div class="card no-scroll big">
+                    <div class="container-header">
+                        <h5>New examination</h5>
+                        <!-- <div style="margin-left: auto;">
+                            <input name="examType" type="checkbox">
+                            <label for="examType">
+                                <acronym title="When this is checked, examination becomes time based i.e. question appear only after the mentioned time.">Time based</acronym>
+                            </label>
+                        </div> -->
+                    </div><hr>
+                    <div class="scroll examination">
+                        <label class="form-col-label" for="examTitle">Title*</label>
+                        <input class="form-control" type="text" name="examTitle" id="examTitle" placeholder="Mid-Term Examination">
+
+                        <label for="examDesc" class="form-col-label">Description(Optional)</label>
+                        <textarea name="" id="examDesc" class="form-control" placeholder="Examinaion Guidelines"></textarea>
+
+                        <label class="form-col-label" for="examDate">Examination Date*(On Firefox/Safari - <strong>YYYY-MM-DD hh:mm</strong>)</label>
+                        <input class="form-control" type="datetime-local" name="examDate" id="examDate" placeholder="Examination Date">
+
+                        <label for="examDuration" class="form-col-label">Examination Duration*</label>
+                        <input type="number" name="examDuration" id="examDuration" class="form-control" placeholder="Exam Duration(In minutes)">
+
+                        <label for="examMarks" class="form-col-label">Total Marks*</label>
+                        <input type="number" name="examMarks" id="examMarks" class="form-control" placeholder="Total Marks">
+
+                        <div class="fileInputDiv">
+                            <strong>You can upload a document from your device. <span style="display: none; cursor: pointer;" id="examDocChosen" class="badge badge-info" onclick="resetFileSelection('examDoc', 'examDocChosen')">File chosen. Reset?</span></strong>
+                            <input style="display: none;" type="file" name="examDoc" id="examDoc" accept="image/*, .pdf" onchange="fileChosen('examDoc', 'examDocChosen')">
+                            <label class="btn btn-outline-primary" for="examDoc">Upload</label>
+                        </div>
+                        
+                        <div style="text-align: center;"><strong>OR</strong></div><br>
+                        
+                        <strong class="text-danger">Questions are NOT added if file is chosen, to deselect click on reset button.</strong>
+                        
+                        <div class="examQuestions" id="examQuestions">
+                            <div id="ques0" class="examQuestionContainer">
+                                <div class="quesText">
+                                    <textarea class="form-control" placeholder="Question 1"></textarea>
+                                    <div class="examQuestionInfo">
+                                        <input class="form-control form-control-sm" type="number" name="quesDuration" placeholder="Dur.(In min)">
+                                        <input class="form-control form-control-sm" type="number" name="quesMarks" placeholder="Marks">
+                                        <select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')">
+                                            <option value="0">Subjective</option>
+                                            <option value="1">Objective</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button style="margin-top: 12px;" class="btn btn-outline-primary" onclick="resetQuestions()">Reset</button>
+                        <button style="margin-top: 12px;" class="btn btn-primary" onclick="addMoreQuestions()">Save/Add more</button>
+                    </div>
+                </div>
+                <div class="card-no-color no-scroll small">
+                    <div class="container-header">
+                        <h5>Examinations Archive</h5>
+                    </div><hr>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Models -->
+    <!-- Change Faculty Model -->
+    <div class="modal fade" id="changeFacultyModal" tabindex="-1" aria-labelledby="changeFacultyModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Change Faculty</h5>
+                    <button id="close-changeFaculty-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="currentFaculty" class="col-form-label col-form-label-sm">Current Faculty</label>
+                        <div id="currentFacultyDetails"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="selectedFaculty" class="col-form-label col-form-label-sm">Preview</label>
+                        <div id="selectedFacultyDetails"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="changeFaculty" class="col-form-label col-form-label-sm">Change Faculty</label>
+                        <select name="faculty" class="form-select" id="facultySelected" onchange="facultySelected()"></select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button id="change-faculty-btn" type="button" class="btn btn-primary"
+                        onclick="changeFaculty()">Change</button>
                 </div>
             </div>
         </div>
-    </main>
+    </div>
+
     <%- include("partials/footer") -%>
     <script src="/js/subject.js"></script>
 </body>

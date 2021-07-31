@@ -8,6 +8,7 @@ router.post('/:_batchId', authAllowOrg, controller.addClass);
 router.get('/:_id', auth, controller.getClassDetails);
 
 router.patch('/:_id', authAllowFaculty, controller.updateClass);
+router.get('/subject/:_id', authAllowFaculty, controller.getSubjectDetails);
 router.patch('/subject/:_id', authAllowFaculty, controller.patchSubject);
 router.delete('/:_id', authAllowOrg, controller.deleteClass);
 

@@ -8,7 +8,7 @@ const facultySchema = mongoose.Schema({
     email: { type: String, unique: true },
     password: { type: String, required: true, select: false },
     role: String,
-    img_url: String,
+    img_url: { type: String, default: "https://www.gstatic.com/images/branding/product/2x/avatar_square_blue_120dp.png" },
     details: String,
     qualification: String,
     flag_show: { type: Boolean, default: false }

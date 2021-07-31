@@ -5,8 +5,9 @@
     font-family: 'Montserrat';
 }
 
-header,.container-header { display: flex; align-items: flex-end; }
+header,.container-header { display: flex; align-items: center; padding: 0 4px; }
 header>button,.container-header>button { margin-left: auto; }
+.container-header>h5 { margin: 0; }
 hr { margin: 0.5rem 0; }
 
 main {
@@ -66,8 +67,9 @@ label { margin: 0; }
 }
 .scroll::-webkit-scrollbar-thumb { background-color: #dddddd; }
 .no-scroll { height: auto; padding: 8px; }
+.small { width: 39%; }
+.big { width: 59%; }
 
-#notesContainer { width: 39%; }
 #notesContainer>.container-header>label { margin-left: auto; }
 #notesContainer>.container-header>button { margin-left: 4px; }
 #messages { background-color: #fafafa; }
@@ -112,11 +114,9 @@ label { margin: 0; }
 }
 #inputContainer>input[type="text"] { margin-right: 6px;}
 
-#assignments {
-    padding: 8px;
-    width: 59%;
-}
-.assignments>input { margin-bottom: 12px; }
+#assignments { padding: 8px; }
+.assignments>input, 
+.assignments>textarea { margin-bottom: 12px; }
 .assignmentsBottom { text-align: right; }
 
 .fileInputDiv { 
@@ -126,7 +126,7 @@ label { margin: 0; }
 }
 .fileInputDiv>label { margin-left: auto; }
 
-.questionContainer {
+.questionContainer, .examQuestionContainer {
     margin: 12px 0;
     margin-left: 0px;
     padding: 12px 12px;
@@ -134,7 +134,7 @@ label { margin: 0; }
     border-radius: 4px;
     margin-left: 8px;
 }
-.quesText { display: flex; align-items: flex-end; }
+.quesText { display: flex; align-items: flex-start; }
 .quesText>.quesType { 
     margin-left: 4px;
     width: max-content; 
@@ -160,6 +160,16 @@ label { margin: 0; }
     border-radius: 2px;
 }
 
+.examination>input, .examination>textarea { margin-bottom: 12px; } 
+.examQuestionInfo { margin-left: 2px; }
+
+#currentFacultyDetails, #selectedFacultyDetails {
+    display: flex;
+    margin: 0px 12px;
+    background: #0d6efd1a;
+    padding: 8px;
+}
+
 .footer {
     padding: 1rem;
     background-color: #0d6efd1a;
@@ -175,9 +185,9 @@ label { margin: 0; }
         margin-top: 48px;
     }
     .row { margin: 0 4px; }
-    #notesContainer, #assignments { width: 48%; }
+    .big, .small { width: 48%; }
     .quesText { display: block; }
-    .quesText>.quesType { margin-left: auto; margin-top: 4px; }
+    .quesText>.quesType, .examQuestionInfo { margin-left: auto; margin-top: 4px; width: max-content; }
 }
 @media (max-width: 600px) {
     main {
@@ -185,7 +195,7 @@ label { margin: 0; }
     }
     .scroll, .no-scroll { margin: 0; margin-top: 12px; }
     #messages, .assignments { margin: 8px 0; }
-    #notesContainer, #assignments { width: 100%; }
+    .big, .small { width: 100%; }
 }
 @media (max-width: 450px) {
     main { 
