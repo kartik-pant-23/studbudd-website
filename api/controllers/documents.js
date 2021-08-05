@@ -87,7 +87,7 @@ exports.deleteDocument = (req,res) => {
             })
         } else {
             res.status(404).json({
-                message: "Document already deleted and unauthorised!"
+                message: "Document already deleted or you are unauthorised!"
             })
         }
     })

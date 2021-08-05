@@ -18,9 +18,8 @@
                 <div class="card-no-color no-scroll small" id="notesContainer">
                     <div class="container-header">
                         <h5>Interact</h5>
-                        <input style="display: none;" type="file" name="notes" id="notes" accept="image/*, .pdf">
-                        <label class="btn btn-outline-primary" for="assignment">Upload</label>
-                        <button class="btn btn-primary">Archive</button>
+                        <button style="margin-left: auto;" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#uploadNotesModal">Upload</button>
+                        <button style="margin-left: 4px;" class="btn btn-primary">Archive</button>
                     </div><hr>
                     <div id="loadingBadge" style="text-align: center; display: none;">
                         <span class="badge badge-info">Loading more chats...</span>
@@ -119,13 +118,13 @@
                         <strong class="text-danger">Questions are NOT added if file is chosen, to deselect click on reset button.</strong>
                         
                         <div class="examQuestions" id="examQuestions">
-                            <div id="ques0" class="examQuestionContainer">
+                            <div id="exam-ques0" class="examQuestionContainer">
                                 <div class="quesText">
-                                    <textarea class="form-control" placeholder="Question 1"></textarea>
+                                    <textarea class="form-control" placeholder="Question 1" rows="3"></textarea>
                                     <div class="examQuestionInfo">
-                                        <input class="form-control form-control-sm" type="number" name="quesDuration" placeholder="Dur.(In min)">
-                                        <input class="form-control form-control-sm" type="number" name="quesMarks" placeholder="Marks">
-                                        <select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')">
+                                        <input class="form-control form-control-sm" type="number" name="examQuesDuration" placeholder="Duration (In min)">
+                                        <input class="form-control form-control-sm" type="number" name="examQuesMarks" placeholder="Marks">
+                                        <select class="quesType form-select form-select-sm" name="quesType" id="exam-ques0-type" onchange="changeQuestionType('exam-ques0')">
                                             <option value="0">Subjective</option>
                                             <option value="1">Objective</option>
                                         </select>
@@ -133,8 +132,11 @@
                                 </div>
                             </div>
                         </div>
-                        <button style="margin-top: 12px;" class="btn btn-outline-primary" onclick="resetQuestions()">Reset</button>
-                        <button style="margin-top: 12px;" class="btn btn-primary" onclick="addMoreQuestions()">Save/Add more</button>
+                        <button style="margin-top: 12px;" class="btn btn-outline-primary" onclick="resetQuestions(true)">Reset</button>
+                        <button style="margin-top: 12px;" class="btn btn-primary" onclick="addMoreQuestions(true)">Save/Add more</button>
+                    </div>
+                    <div class="examBottom">
+                        <button id="createExamBtn" class="btn btn-primary" onclick="submitExam()">Create</button>
                     </div>
                 </div>
                 <div class="card-no-color no-scroll small">
@@ -173,6 +175,33 @@
                 <div class="modal-footer">
                     <button id="change-faculty-btn" type="button" class="btn btn-primary"
                         onclick="changeFaculty()">Change</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload notes modal -->
+    <div class="modal fade" id="uploadNotesModal" tabindex="-1" aria-labelledby="uplaodNotesModalLabel"
+    aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Notes</h5>
+                    <button id="close-uploadNotes-modal" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <label for="title" class="col-form-label col-form-label-sm">Title*</label>
+                    <input type="text" name="title" id="notesTitle" class="form-control mb-3" placeholder="Notes title">
+
+                    <label for="description" class="col-form-label col-form-label-sm">Description (Optional)</label>
+                    <input type="text" name="description" id="notesDescription" class="form-control mb-3" placeholder="Notes description">
+
+                    <label for="notes" class="col-form-label col-form-label-sm">(.jpg, .jpeg, .png, .pdf)</label>
+                    <input type="file" name="notes" id="notes" class="form-control form-control-sm mb-3" accept="image/*, .pdf">
+                </div>
+                <div class="modal-footer">
+                    <button id="upload-notes-btn" type="button" class="btn btn-primary"
+                        onclick="uploadNotes()">Upload</button>
                 </div>
             </div>
         </div>

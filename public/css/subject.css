@@ -70,8 +70,6 @@ label { margin: 0; }
 .small { width: 39%; }
 .big { width: 59%; }
 
-#notesContainer>.container-header>label { margin-left: auto; }
-#notesContainer>.container-header>button { margin-left: 4px; }
 #messages { background-color: #fafafa; }
 .chat {
     width: max-content;
@@ -117,7 +115,7 @@ label { margin: 0; }
 #assignments { padding: 8px; }
 .assignments>input, 
 .assignments>textarea { margin-bottom: 12px; }
-.assignmentsBottom { text-align: right; }
+.assignmentsBottom, .examBottom { text-align: right; }
 
 .fileInputDiv { 
     margin: 16px 0;

@@ -9,20 +9,24 @@ const token = window.localStorage.getItem("token");
 const subjectId = window.location.pathname.split('/').reverse()[0];
 
 // Adding Assignments
-function resetQuestions() {
-    const questions = $('questions');
-    questions.innerHTML = `<div id="ques0" class="questionContainer"><div class="quesText"><textarea class="form-control" placeholder="Question 1"></textarea><select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div>`;
+function resetQuestions(isExam = false) {
+    const questions = (isExam) ?$('examQuestions') :$('questions');
+    const assignmentQuestionHTML = `<div id="ques0" class="questionContainer"><div class="quesText"><textarea class="form-control" placeholder="Question 1"></textarea><select class="quesType form-select form-select-sm" name="quesType" id="ques0-type" onchange="changeQuestionType('ques0')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div>`;
+    const examQuestionHTML = `<div id="exam-ques0" class="examQuestionContainer"><div class="quesText"><textarea class="form-control" placeholder="Question 1" rows="3"></textarea><div class="examQuestionInfo"><input class="form-control form-control-sm" type="number" name="examQuesDuration" placeholder="Duration (In min)"><input class="form-control form-control-sm" type="number" name="examQuesMarks" placeholder="Marks"><select class="quesType form-select form-select-sm" name="quesType" id="exam-ques0-type" onchange="changeQuestionType('exam-ques0')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div></div>`;
+
+    questions.innerHTML = (isExam) ?examQuestionHTML :assignmentQuestionHTML;
 }
-function addMoreQuestions() {
-    const questions = $("questions");
+function addMoreQuestions(isExam = false) {
+    const questions = (isExam) ?$("examQuestions") :$("questions") ;
     const lastQues = questions.lastElementChild;
     const lastQuesText = lastQues.firstElementChild;
+    const lastQuesType = $(`${lastQues.id}-type`);
     const lastQuesOptions = $(lastQues.id+"-options");
     var shouldAdd = true;
 
     const quesValue = lastQuesText.firstElementChild.value;
     if(quesValue && quesValue.trim()!='') {
-        if(lastQuesText.lastElementChild.value == 1) {
+        if(lastQuesType.value == 1) {
             if(lastQuesOptions && lastQuesOptions.childElementCount < 3) {
                 alert("Add at least two options!");
                 shouldAdd = false;
@@ -33,18 +37,40 @@ function addMoreQuestions() {
         shouldAdd = false;
     }
 
+    if(isExam) {
+        var quesInfo = lastQuesText.lastElementChild;
+        if(quesInfo.children[0].value.trim() == '') {
+            alert("Duration is mandatory!");
+            shouldAdd = false;
+        } else if(quesInfo.children[1].value.trim() == '') {
+            alert("Marks is mandatory!");
+            shouldAdd = false;
+        }
+    }
+
     if(shouldAdd) {
         lastQuesText.firstElementChild.disabled = true;
-        lastQuesText.lastElementChild.style.display = "none";
+        lastQuesText.firstElementChild.setAttribute("rows", "1");
+        if(isExam) {
+            lastQuesText.lastElementChild.children[0].disabled = true;
+            lastQuesText.lastElementChild.children[1].disabled = true;
+            lastQuesText.lastElementChild.lastElementChild.style.display = "none";
+        } else {
+            lastQuesText.lastElementChild.style.display = "none";
+        }
         if(lastQuesOptions) lastQuesOptions.lastElementChild.style.display = "none";
 
-        const quesId = `ques${questions.childElementCount}`;
+        const quesId = `${isExam ?'exam-' :''}ques${questions.childElementCount}`;
         const newQuesContainer = document.createElement('div');
         newQuesContainer.className = "questionContainer";
         newQuesContainer.setAttribute("id", quesId);
-        newQuesContainer.innerHTML = `<div class="quesText">
-        <textarea class="form-control" placeholder="Question ${parseInt(questions.childElementCount)+1}"></textarea>
-        <select class="quesType form-select form-select-sm" name="quesType" id="${quesId}-type" onchange="changeQuestionType('${quesId}')"><option value="0">Subjective</option><option value="1">Objective</option></select></div>`;
+
+        const assignmentQuestionHTML = `<div class="quesText">
+        <textarea class="form-control" placeholder="Question ${parseInt(questions.childElementCount)+1}"></textarea><select class="quesType form-select form-select-sm" name="quesType" id="${quesId}-type" onchange="changeQuestionType('${quesId}')"><option value="0">Subjective</option><option value="1">Objective</option></select></div>`;
+        
+        const examQuestionHTML = `<div class="quesText"><textarea class="form-control" placeholder="Question ${parseInt(questions.childElementCount)+1}" rows="3"></textarea><div class="examQuestionInfo"><input class="form-control form-control-sm" type="number" name="examQuesDuration" placeholder="Duration (In min)"><input class="form-control form-control-sm" type="number" name="examQuesMarks" placeholder="Marks"><select class="quesType form-select form-select-sm" name="quesType" id="${quesId}-type" onchange="changeQuestionType('${quesId}')"><option value="0">Subjective</option><option value="1">Objective</option></select></div></div>`;
+
+        newQuesContainer.innerHTML = (isExam) ?examQuestionHTML :assignmentQuestionHTML;
         questions.appendChild(newQuesContainer);
 
         lastQues.style.borderColor = "#0d6dfd66";
@@ -84,8 +110,8 @@ function changeQuestionType(id) {
         if(options) options.style.display = "none";
     }
 }
-function getQuestions() {
-    const questions = $("questions");
+function getQuestions(isExam = false) {
+    const questions = (isExam) ?$("examQuestions") :$("questions");
     var data = [];
     Array.from(questions.children).forEach(question => {
         var questionText = question.firstElementChild;
@@ -93,7 +119,11 @@ function getQuestions() {
         if(questionText.firstElementChild.disabled) {
             var quesData = {};
             quesData["question"] = questionText.firstElementChild.value;
-            quesData["type"] = questionText.lastElementChild.value;
+            if(isExam) {
+                quesData["duration"] = questionText.lastElementChild.children[0].value;
+                quesData["marks"] = questionText.lastElementChild.children[1].value;
+                quesData["type"] = questionText.lastElementChild.children[2].value;
+            } else quesData["type"] = questionText.lastElementChild.value;
 
             if(quesData["type"] == 1) {
                 quesData["options"] = [];
@@ -204,6 +234,102 @@ function submitAssignment() {
     }
 }
 
+function submitExam() {
+    const createBtn = $("createExamBtn");
+    const title = $("examTitle").value;
+    const description = $("examDesc").value;
+    const date = $("examDate").value;
+    const duration = $("examDuration").value;
+    const marks = $("examMarks").value;
+    const file = $("examDoc").files[0];
+    const questions = getQuestions();
+
+    var shouldContinue = true;
+    if(title.trim()=="" || !date || duration.trim()=="" || marks.trim()=="") {
+        shouldContinue = false;
+        alert("Fields marked with * are mandatory!");
+    } else if(!file && questions.length == 0) {
+        shouldContinue = false;
+        alert("Either a file or questions must be added!\nAlert: In case both are added.. file is chosen!");
+    }
+
+    if(shouldContinue) {
+        createBtn.innerText = "Adding...";
+        createBtn.disabled = true;
+
+        function handleResponse(res) {
+            res.json().then(data => {
+                if(res.status == 200) {
+                    $("examTitle").value = null;
+                    $("examDesc").value = null;
+                    $("examDate").value = null;
+                    $("examDuration").value = null;
+                    $("examMarks").value = null;
+                    $("examDoc").value = null;
+                    resetQuestions(true);
+
+                    socket.emit("chat", {
+                        sender: userId,
+                        senderName: userName,
+                        reference: subjectId,
+                        exam: data._id
+                    });
+                }
+                else {
+                    alert(`Error Message: ${data.message}`);
+                }
+            }).catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+            })
+            createBtn.innerText = "Create";
+            createBtn.disabled = false;
+        }
+
+        if(file) {
+            var body = new FormData();
+            body.append("file", file);
+            body.append("title", title);
+            body.append("submissionDate", new Date(date).toISOString());
+            body.append("subject", subjectId);
+            if(description) body.append("description", description);
+            fetch(`${baseUrl}/api/assignment/upload_doc`, {
+                method: "POST",
+                headers: { "token": token },
+                body: body
+            }).then(res => handleResponse(res))
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+                createBtn.innerText = "Create";
+                createBtn.disabled = false;
+            })
+        } else {
+            var body = {
+                title: title,
+                questions: questions,
+                submissionDate: new Date(date).toISOString(),
+                subject: subjectId
+            }
+            if(description) body.description = description;
+            fetch(`${baseUrl}/api/assignment/upload_form`, {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                    "token": token
+                },
+                body: JSON.stringify(body)
+            }).then(res => handleResponse(res))
+            .catch(err => {
+                console.log(err);
+                alert("Something went wrong!");
+                createBtn.innerText = "Create";
+                createBtn.disabled = false;
+            })
+        }
+    }
+}
+
 function resetFileSelection(fileId, flagId) {
     $(fileId).value = null;
     $(flagId).style.display = "none";
@@ -223,6 +349,71 @@ function setMinDate() {
     var mm = today.getMinutes(); if(mm<10) mm = '0' + mm; 
     today = YYYY+"-"+MM+"-"+DD+"T"+hh+":"+mm;
     $("assignmentSubmissionDate").setAttribute("min", today);
+    $("examDate").setAttribute("min", today);
+}
+
+// Adding notes 
+function uploadNotes() {
+    const title = $("notesTitle").value;
+    const description = $("notesDescription").value;
+    const file = $("notes").files[0];
+
+    var shouldAdd = true;
+    if(!title) {
+        alert("Title is madatory!");
+        shouldAdd = false;
+    } else if(!file) {
+        alert("Adding notes is mandatory!");
+        shouldAdd = false;
+    }
+
+    if(shouldAdd) {
+        const btn = $("upload-notes-btn");
+        btn.innerText = "Uploading...";
+        btn.disabled = true;
+
+        var body = new FormData();
+        body.append("file", file);
+        body.append("tag", title);
+        body.append("ref", subjectId);
+        if(description && description.trim()!="") body.append("description", description);
+
+        fetch(`${baseUrl}/api/document/upload`, {
+            method: "POST",
+            headers: { "token": token },
+            body: body
+        }).then(res => {
+            res.json().then(data => {
+                console.log(data);
+                if(res.status == 200) {
+                    $("notesTitle").value = null;
+                    $("notesDescription").value = null;
+                    $("notes").value = null;
+
+                    socket.emit("chat", {
+                        sender: userId,
+                        senderName: userName,
+                        reference: subjectId,
+                        note: data.document._id
+                    });
+
+                    $("close-uploadNotes-modal").click();
+                } else {
+                    alert(`Error message: ${data.message}`);
+                }
+
+                btn.innerText = "Upload";
+                btn.disabled = false;
+            }).catch(err => {
+                console.log(err);
+                alert("Somthing went wrong!");
+            })
+        })
+        .catch(err => {
+            console.log(err);
+            alert("Somthing went wrong!");
+        })
+    }
 }
 
 // Handling messages and socket
@@ -253,7 +444,18 @@ $("inputContainer").addEventListener("submit", function(e) {
     $("sendChatButton").disabled = true;
     socket.emit("chat", data);
 });
-function createNoteContainer(data, flag=false) {}
+function createNoteContainer(data, flag=false) {
+    if(!flag) chatData.push(data);
+    const { note } = data;
+
+    const container = document.createElement("div");
+    container.className = "noteItem";
+    container.innerHTML = `<h6><strong>${note.tag}</strong></h6><div>${(note.description) ?note.description :'<em>-----No description-----</em>'}</div>`;
+
+    if(flag) return container;
+    $("messages").appendChild(container);
+    handleScroll();
+}
 function createAssignmentContainer(data, flag=false) {
     if(!flag) chatData.push(data);
     const { assignment } = data;
