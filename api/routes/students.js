@@ -7,5 +7,6 @@ const controller = require('../controllers/students')
 router.post('/register', authAllowFaculty, upload, get_data, controller.register);
 router.post('/login', controller.login);
 router.get('/', auth, controller.getInfo);
+router.patch('/', auth, controller.updateStudentDetails);
 
 module.exports = router;

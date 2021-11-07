@@ -101,18 +101,41 @@ exports.getInfo = (req, res) => {
         })
         .exec()
         .then(user => {
-            Document.find({ ref: user.class._id }).exec()
-            .then(docs => {
-                res.status(200).json({
-                    user: {
-                        name: user.name,
-                        email: user.email
-                    },
-                    class: user.class,
-                    documents: docs
-                })
-            })
-            .catch(err => error_handler(res, err));
+	    Organization.findOne({ domain: req.user.domain })
+		.select('name email domain')
+		.exec()
+		.then(org => {
+		    res.status(200).json({
+			user: user,
+			organization: org
+		    })
+		})
+		.catch(err => error_handler(res, err));
         })
         .catch(err => error_handler(res, err));
+}
+
+// for now update allows only password changing
+// might add adding image later
+exports.updateStudentDetails = (req, res) => {
+    const {newPassword} = req.body
+    const passwordHash = bcryptjs.hashSync(newPassword, 10)
+    Student.findByIdAndUpdate(req.user._id, {
+	$set: {password: passwordHash}
+    }, {new: true})
+        .populate({
+            path: "class",
+            populate: {
+                path: "subjects.coordinator",
+                model: "Faculty",
+                select: "name"
+            },
+            select: "tag subjects"
+        })
+	.exec()
+	.then(newUser => {
+	    if(newUser) res.status(200).json({ newUser: newUser })
+	    else res.status(404).json({message: "User doesn't exist!"})
+	})
+	.catch(err => error_handler(res, err));
 }
